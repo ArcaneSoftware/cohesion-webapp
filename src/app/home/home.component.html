@@ -1,0 +1,22 @@
+<div class="home-container">
+  <mat-toolbar color="primary" class="example-toolbar">
+    <button mat-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+    <h1 class="home-app-name">Cohesion App</h1>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="home-sidenav-container">
+    <mat-sidenav #sidenav mode="side" opened>
+      <!-- <p><button mat-button (click)="onClickDataSource()">Data Source</button></p> -->
+
+      <mat-action-list>
+        <mat-list-item [routerLink]="['data']">Data</mat-list-item>
+        <mat-list-item [routerLink]="['collection']">Collection</mat-list-item>
+      </mat-action-list>
+    </mat-sidenav>
+
+    <<mat-sidenav-content>
+      <h2>HOME</h2>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
