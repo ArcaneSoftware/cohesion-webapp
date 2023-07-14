@@ -41,6 +41,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
+import {CdkAccordionModule} from '@angular/cdk/accordion';
 // import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -89,6 +90,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+    CdkAccordionModule,
     PortalModule,
     ScrollingModule,
     //FlexLayoutModule,
