@@ -8,22 +8,26 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { DataComponent } from './features/data/data.component';
 import { CollectionComponent } from './features/collection/collection.component';
+import { PrimitiveComponent } from './features/primitive/primitive.component';
+import { SourceComponent } from './features/source/source.component';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
     HomeComponent,
-    DataComponent,
     CollectionComponent,
+    PrimitiveComponent,
+    SourceComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    StoreModule.forRoot({}, {})
   ],
   providers: [],
   bootstrap: [AppComponent]

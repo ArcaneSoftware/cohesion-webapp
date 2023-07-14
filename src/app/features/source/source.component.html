@@ -1,0 +1,83 @@
+<div class="source-container">
+  <mat-card class="source-type-card">
+    <table mat-table [dataSource]="_sourceTypes" multiTemplateDataRows class="mat-elevation-z8">
+      <!-- Source Type Name Column -->
+      <ng-container matColumnDef="SourceTypeName">
+        <th mat-header-cell *matHeaderCellDef>Source Type</th>
+        <td mat-cell *matCellDef="let element" (click)="onClickSourceTypeRow(element['SourceTypeName']); $event.stopPropagation()">
+          {{ element.SourceTypeName }}
+        </td>
+      </ng-container>
+
+      <!-- Expand Icon Column -->
+      <ng-container matColumnDef="ExpandAction">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            aria-label="expand row"
+            (click)="_sourceTypeExpandedElement = _sourceTypeExpandedElement === element ? null : element; $event.stopPropagation()"
+          >
+            <mat-icon *ngIf="_sourceTypeExpandedElement !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="_sourceTypeExpandedElement === element">keyboard_arrow_up</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="_sourceTypeExpandedColumns.length">
+          <div class="source-type-element-detail" [@detailExpand]="element == _sourceTypeExpandedElement ? 'expanded' : 'collapsed'">
+            <div class="source-type-element-id" matTooltip="Id">{{ element.SourceTypeId }}</div>
+            <div class="source-type-element-description" matTooltip="Description">{{ element.SourceTypeDescription }}</div>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- display header row or not -->
+      <tr mat-header-row *matHeaderRowDef="_sourceTypeExpandedColumns" style="display: none"></tr>
+      <tr
+        mat-row
+        *matRowDef="let element; columns: _sourceTypeExpandedColumns"
+        class="source-type-element-row"
+        [class.source-type-expanded-row]="_sourceTypeExpandedElement === element"
+      ></tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="source-type-detail-row"></tr>
+    </table>
+
+    <mat-divider></mat-divider>
+    <div>
+      <button mat-button>
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-button>
+        <mat-icon>remove</mat-icon>
+      </button>
+    </div>
+  </mat-card>
+
+  <mat-card class="source-card">
+    <mat-label style="font-size: x-large; margin: 10px">All Name</mat-label>
+
+    <mat-divider></mat-divider>
+
+    <mat-card class="source-table-card">
+      <div>
+        <table mat-table [dataSource]="_sources" class="mat-elevation-z8">
+          <ng-container matColumnDef="SourceName">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.SourceName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="Address">
+            <th mat-header-cell *matHeaderCellDef>Address</th>
+            <td mat-cell *matCellDef="let element">{{ element.Address }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="_sourceColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: _sourceColumns"></tr>
+        </table>
+        <mat-divider></mat-divider>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of source elements"> </mat-paginator>
+      </div>
+    </mat-card>
+  </mat-card>
+</div>
