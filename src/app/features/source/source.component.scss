@@ -14,7 +14,7 @@
   margin: 10px;
 }
 
-.source-table-card{
+.source-table-card {
   margin: 10px;
 }
 
@@ -26,13 +26,13 @@ table {
   height: 0;
 }
 
-// tr.source-type-element-row:not(.source-type-expanded-row):hover {
-//   background: gray
-// }
+tr.source-type-element-row:not(.source-type-expanded-row):hover {
+  background: gray;
+}
 
-// tr.source-type-element-row:not(.source-type-expanded-row):active {
-//   background: gray;
-// }
+tr.source-type-element-row:not(.source-type-expanded-row):active {
+  background: gray;
+}
 
 .source-type-element-row td {
   border-bottom-width: 0;
