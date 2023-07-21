@@ -12,24 +12,27 @@ import { CollectionComponent } from './features/collection/collection.component'
 import { PrimitiveComponent } from './features/primitive/primitive.component';
 import { SourceComponent } from './features/source/source.component';
 import { StoreModule } from '@ngrx/store';
+import { HttpClientModule } from '@angular/common/http';
+import { reducer } from './app.reducer';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PageNotFoundComponent,
-    HomeComponent,
-    CollectionComponent,
-    PrimitiveComponent,
-    SourceComponent,
-  ],
+  declarations: [AppComponent, PageNotFoundComponent, HomeComponent, CollectionComponent, PrimitiveComponent, SourceComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    StoreModule.forRoot({}, {})
+    HttpClientModule,
+    StoreModule.forRoot(reducer, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictStateSerializability: false,
+        strictActionSerializability: false,
+      },
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,4 +1,4 @@
 {
-  "apiBaseUrl": "http://localhost:33080/api/",
-  "version": "0.0.0.1"
+  "baseApiUrl": "http://localhost:33081/api/",
+  "appVersion": "0.0.0.1"
 }

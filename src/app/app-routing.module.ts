@@ -17,7 +17,7 @@ const routes: Routes = [
     children: [
       {
         path: 'source',
-        component: SourceComponent
+        component: SourceComponent,
       },
       {
         path: 'primitive',

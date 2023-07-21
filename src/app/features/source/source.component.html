@@ -1,82 +1,112 @@
 <div class="source-container">
-  <mat-card class="source-type-card">
-    <table mat-table [dataSource]="_sourceTypes" multiTemplateDataRows class="mat-elevation-z8">
+  <mat-card class="source-type-main-card">
+    <table mat-table [dataSource]="sourceTypeElements" multiTemplateDataRows class="mat-elevation-z8">
       <!-- Source Type Name Column -->
       <ng-container matColumnDef="SourceTypeName">
         <th mat-header-cell *matHeaderCellDef>Source Type</th>
-        <td mat-cell *matCellDef="let element" (click)="onClickSourceTypeRow(element['SourceTypeName']); $event.stopPropagation()">
-          {{ element.SourceTypeName }}
+        <td mat-cell *matCellDef="let sourceTypeElement" (click)="onClickSourceTypeElement(sourceTypeElement); $event.stopPropagation()">
+          {{ sourceTypeElement.sourceTypeName }}
         </td>
       </ng-container>
 
       <!-- Expand Icon Column -->
       <ng-container matColumnDef="ExpandAction">
         <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let sourceTypeElement">
           <button
             mat-icon-button
             aria-label="expand row"
-            (click)="_sourceTypeExpandedElement = _sourceTypeExpandedElement === element ? null : element; $event.stopPropagation()"
+            (click)="sourceTypeExpandedElement = sourceTypeExpandedElement === sourceTypeElement ? null : sourceTypeElement; $event.stopPropagation()"
           >
-            <mat-icon *ngIf="_sourceTypeExpandedElement !== element">keyboard_arrow_down</mat-icon>
-            <mat-icon *ngIf="_sourceTypeExpandedElement === element">keyboard_arrow_up</mat-icon>
+            <mat-icon *ngIf="sourceTypeExpandedElement !== sourceTypeElement">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="sourceTypeExpandedElement === sourceTypeElement">keyboard_arrow_up</mat-icon>
           </button>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="expandedDetail">
-        <td mat-cell *matCellDef="let element" [attr.colspan]="_sourceTypeExpandedColumns.length">
-          <div class="source-type-element-detail" [@detailExpand]="element == _sourceTypeExpandedElement ? 'expanded' : 'collapsed'">
-            <div class="source-type-element-id" matTooltip="Id">{{ element.SourceTypeId }}</div>
-            <div class="source-type-element-description" matTooltip="Description">{{ element.SourceTypeDescription }}</div>
+        <td
+          mat-cell
+          *matCellDef="let sourceTypeElement"
+          [attr.colspan]="sourceTypeExpandedColumns.length"
+          (click)="onClickSourceTypeElement(sourceTypeElement); $event.stopPropagation()"
+        >
+          <div class="source-type-element-detail" [@detailExpand]="sourceTypeElement == sourceTypeExpandedElement ? 'expanded' : 'collapsed'">
+            <div class="source-type-element-id" matTooltip="Id">{{ sourceTypeElement.sourceTypeId }}</div>
+            <div class="source-type-element-description" matTooltip="Description">
+              {{ sourceTypeElement.sourceTypeDescription }}
+            </div>
           </div>
         </td>
       </ng-container>
 
       <!-- display header row or not -->
-      <tr mat-header-row *matHeaderRowDef="_sourceTypeExpandedColumns" style="display: none"></tr>
+      <tr mat-header-row *matHeaderRowDef="sourceTypeExpandedColumns" style="display: none"></tr>
       <tr
         mat-row
-        *matRowDef="let element; columns: _sourceTypeExpandedColumns"
+        *matRowDef="let element; columns: sourceTypeExpandedColumns"
         class="source-type-element-row"
-        [class.source-type-expanded-row]="_sourceTypeExpandedElement === element"
+        [class.source-type-expanded-row]="sourceTypeExpandedElement === element"
       ></tr>
       <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="source-type-detail-row"></tr>
     </table>
 
     <mat-divider></mat-divider>
-    <div>
-      <button mat-button>
+
+    <div class="row-direction-container buttons-row">
+      <button *ngIf="selectedSourceType.sourceTypeId != null" mat-icon-button (click)="onCreateSourceType()">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-button>
-        <mat-icon>remove</mat-icon>
-      </button>
+      <button *ngIf="selectedSourceType.sourceTypeId != null" mat-icon-button><mat-icon>remove</mat-icon></button>
     </div>
   </mat-card>
 
-  <mat-card class="source-card">
-    <mat-label style="font-size: x-large; margin: 10px">All Name</mat-label>
+  <mat-card *ngIf="selectedSourceType.sourceTypeId != null" class="source-type-detail-card">
+    <div class="row-direction-container buttons-row">
+      <mat-form-field class="source-type-id-form-field">
+        <mat-label>Id</mat-label>
+        <input readonly="true" matInput type="number" [(ngModel)]="selectedSourceType.sourceTypeId" />
+        <button matPrefix mat-icon-button>
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
 
-    <mat-divider></mat-divider>
+      <mat-form-field class="source-type-name-form-field">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" readonly="false" [(ngModel)]="selectedSourceType.sourceTypeName" />
+        <button matSuffix mat-icon-button (click)="onDeleteSelectedSourceTypeElementName()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
 
-    <mat-card class="source-table-card">
-      <div>
-        <table mat-table [dataSource]="_sources" class="mat-elevation-z8">
-          <ng-container matColumnDef="SourceName">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.SourceName }}</td>
-          </ng-container>
-          <ng-container matColumnDef="Address">
-            <th mat-header-cell *matHeaderCellDef>Address</th>
-            <td mat-cell *matCellDef="let element">{{ element.Address }}</td>
-          </ng-container>
+      <mat-form-field class="source-type-description-form-field">
+        <mat-label>Description</mat-label>
+        <input readonly="true" matInput type="text" [(ngModel)]="selectedSourceType.sourceTypeDescription" />
+        <button matSuffix mat-icon-button>
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
 
-          <tr mat-header-row *matHeaderRowDef="_sourceColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: _sourceColumns"></tr>
-        </table>
-        <mat-divider></mat-divider>
+    <div>
+      <div mat-dialog-actions class="buttons-row">
+        <button mat-raised-button color="accent">Add</button>
+        <button mat-raised-button color="accent">Remove</button>
       </div>
-    </mat-card>
+      <table mat-table [dataSource]="sourceElements" class="mat-elevation-z8">
+        <ng-container matColumnDef="SourceName">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.sourceName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="Address">
+          <th mat-header-cell *matHeaderCellDef>Address</th>
+          <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="sourceColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: sourceColumns"></tr>
+      </table>
+      <mat-divider></mat-divider>
+    </div>
   </mat-card>
 </div>
