@@ -4,22 +4,23 @@
   height: 100%;
 }
 
-.source-type-card {
-  width: 20%;
-  margin: 10px;
+.row-direction-container {
+  display: flex;
+  flex-direction: row;
 }
 
-.source-card {
-  width: 98%;
-  margin: 10px;
+.source-type-main-card {
+  width: 15%;
+  margin: 5px;
+}
+
+.source-type-detail-card {
+  width: 85%;
+  margin: 5px;
 }
 
 .source-table-card {
-  margin: 10px;
-}
-
-table {
-  width: 100%;
+  margin: 5px;
 }
 
 .source-type-detail-row {
@@ -27,11 +28,11 @@ table {
 }
 
 tr.source-type-element-row:not(.source-type-expanded-row):hover {
-  background: gray;
+  background: lightgray;
 }
 
 tr.source-type-element-row:not(.source-type-expanded-row):active {
-  background: gray;
+  background: lightgray;
 }
 
 .source-type-element-row td {
@@ -61,4 +62,28 @@ tr.source-type-element-row:not(.source-type-expanded-row):active {
 
 .mat-column-ExpandAction {
   width: 10%;
+}
+
+.source-type-id-form-field {
+  width: 8%;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.source-type-name-form-field {
+  width: 22%;
+  margin-left: 1px;
+  margin-right: 2px;
+}
+
+.source-type-description-form-field {
+  width: 70%;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.buttons-row {
+  button {
+    margin: 4px;
+  }
 }

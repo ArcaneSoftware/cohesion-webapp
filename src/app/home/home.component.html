@@ -1,22 +1,25 @@
 <div class="home-container">
   <mat-toolbar color="primary">
-    <button mat-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
-    <h1 class="home-app-name">Cohesion App</h1>
+    <!-- <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button> -->
+    <span>Cohesion ({{ appVersion }})</span>
   </mat-toolbar>
-
-  <mat-sidenav-container class="home-sidenav-container">
-    <mat-sidenav #sidenav mode="side" opened>
-      <!-- <p><button mat-button (click)="onClickDataSource()">Data Source</button></p> -->
-
-      <mat-action-list>
-        <mat-list-item [routerLink]="['source']">Source</mat-list-item>
-        <mat-list-item [routerLink]="['primitive']">Primitive</mat-list-item>
-        <mat-list-item [routerLink]="['collection']">Collection</mat-list-item>
-      </mat-action-list>
-    </mat-sidenav>
-
-    <mat-sidenav-content>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+  <mat-drawer-container class="home-sidenav-container mat-typography">
+    <mat-drawer mode="side" disableClose="true" opened="true">
+      <mat-nav-list>
+        <mat-list-item [routerLink]="['source']">
+          <mat-icon color="primary" matTooltip="Source" [matTooltipPosition]="'right'">storage</mat-icon>
+          <!-- <div matListItemTitle>source</div> -->
+        </mat-list-item>
+        <mat-list-item [routerLink]="['primitive']">
+          <mat-icon color="primary" matTooltip="Primitive" [matTooltipPosition]="'right'">folder</mat-icon>
+          <!-- <div matListItemTitle>primitive</div> -->
+        </mat-list-item>
+        <mat-list-item [routerLink]="['collection']">
+          <mat-icon color="primary" matTooltip="Collection" [matTooltipPosition]="'right'">apps</mat-icon>
+          <!-- <div matListItemTitle>collection</div> -->
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-drawer>
+    <mat-drawer-content> <router-outlet></router-outlet></mat-drawer-content>
+  </mat-drawer-container>
 </div>
