@@ -1,0 +1,34 @@
+.buttons-row {
+  button {
+    margin: 4px;
+  }
+}
+
+.source-list-table-container {
+  max-height: 740px;
+  overflow: auto;
+}
+
+.source-list-foot {
+  display: flex;
+  flex-direction: row;
+}
+
+.mat-column-SelectAction {
+  width: 5%;
+}
+.mat-column-EditAction {
+  width: 5%;
+}
+
+.mat-column-SourceName {
+  width: 20%;
+}
+
+.mat-column-Address {
+  width: 70%;
+}
+
+.source-type-row td {
+  border-bottom-width: 0;
+}

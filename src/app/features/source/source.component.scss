@@ -4,86 +4,12 @@
   height: 100%;
 }
 
-.row-direction-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.source-type-main-card {
-  width: 15%;
+.source-type-list-card {
+  width: 22%;
   margin: 5px;
 }
 
 .source-type-detail-card {
-  width: 85%;
+  width: 78%;
   margin: 5px;
-}
-
-.source-table-card {
-  margin: 5px;
-}
-
-.source-type-detail-row {
-  height: 0;
-}
-
-tr.source-type-element-row:not(.source-type-expanded-row):hover {
-  background: lightgray;
-}
-
-tr.source-type-element-row:not(.source-type-expanded-row):active {
-  background: lightgray;
-}
-
-.source-type-element-row td {
-  border-bottom-width: 0;
-}
-
-.source-type-element-detail {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
-
-.source-type-element-id {
-  font-weight: bold;
-  font-size: 24px;
-  line-height: normal;
-}
-
-.source-type-element-description {
-  padding: 16px;
-}
-
-.mat-column-SourceTypeName {
-  width: 90%;
-  font-size: small;
-}
-
-.mat-column-ExpandAction {
-  width: 10%;
-}
-
-.source-type-id-form-field {
-  width: 8%;
-  margin-left: 1px;
-  margin-right: 1px;
-}
-
-.source-type-name-form-field {
-  width: 22%;
-  margin-left: 1px;
-  margin-right: 2px;
-}
-
-.source-type-description-form-field {
-  width: 70%;
-  margin-left: 1px;
-  margin-right: 1px;
-}
-
-.buttons-row {
-  button {
-    margin: 4px;
-  }
 }
