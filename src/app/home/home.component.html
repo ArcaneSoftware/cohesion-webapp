@@ -1,22 +1,18 @@
 <div class="home-container">
   <mat-toolbar color="primary">
-    <!-- <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button> -->
     <span>Cohesion ({{ appVersion }})</span>
   </mat-toolbar>
   <mat-drawer-container class="home-sidenav-container mat-typography">
     <mat-drawer mode="side" disableClose="true" opened="true">
       <mat-nav-list>
         <mat-list-item [routerLink]="['source']">
-          <mat-icon color="primary" matTooltip="Source" [matTooltipPosition]="'right'">storage</mat-icon>
-          <!-- <div matListItemTitle>source</div> -->
+          <mat-icon matTooltip="Source" [matTooltipPosition]="'right'">storage</mat-icon>
         </mat-list-item>
         <mat-list-item [routerLink]="['primitive']">
-          <mat-icon color="primary" matTooltip="Primitive" [matTooltipPosition]="'right'">folder</mat-icon>
-          <!-- <div matListItemTitle>primitive</div> -->
+          <mat-icon matTooltip="Primitive" [matTooltipPosition]="'right'">description</mat-icon>
         </mat-list-item>
         <mat-list-item [routerLink]="['collection']">
-          <mat-icon color="primary" matTooltip="Collection" [matTooltipPosition]="'right'">apps</mat-icon>
-          <!-- <div matListItemTitle>collection</div> -->
+          <mat-icon matTooltip="Collection" [matTooltipPosition]="'right'">apps</mat-icon>
         </mat-list-item>
       </mat-nav-list>
     </mat-drawer>

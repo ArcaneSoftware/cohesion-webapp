@@ -1,0 +1,27 @@
+// tr.source-type-row:not(.source-type-expanded-row):hover {
+//   background: lightgray;
+// }
+
+// tr.source-type-row:not(.source-type-expanded-row):active {
+//   background: lightgray;
+// }
+
+.source-type-row td {
+  border-bottom-width: 0;
+}
+
+.mat-column-SelectAction {
+  width: 5%;
+}
+.mat-column-SourceTypeName {
+  width: 90%;
+}
+.mat-column-MoreActions {
+  width: 5%;
+}
+
+.buttons-row {
+  button {
+    margin: 4px;
+  }
+}

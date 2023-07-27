@@ -14,9 +14,11 @@ import { SourceComponent } from './features/source/source.component';
 import { StoreModule } from '@ngrx/store';
 import { HttpClientModule } from '@angular/common/http';
 import { reducer } from './app.reducer';
+import { SourceTypeListComponent } from './features/source/source-type-list/source-type-list.component';
+import { SourceTypeDetailComponent } from './features/source/source-type-detail/source-type-detail.component';
 
 @NgModule({
-  declarations: [AppComponent, PageNotFoundComponent, HomeComponent, CollectionComponent, PrimitiveComponent, SourceComponent],
+  declarations: [AppComponent, PageNotFoundComponent, HomeComponent, CollectionComponent, PrimitiveComponent, SourceComponent, SourceTypeListComponent, SourceTypeDetailComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
