@@ -1,4 +1,4 @@
-import { SourceTypeModel } from '../../../models/source-type-model';
+import { SourceTypeModel } from '../../models/source-type-model';
 
 export interface SourceTypesResponse {
   isSuccessful: boolean;

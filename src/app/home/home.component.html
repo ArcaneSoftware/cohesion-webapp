@@ -5,11 +5,14 @@
   <mat-drawer-container class="home-sidenav-container mat-typography">
     <mat-drawer mode="side" disableClose="true" opened="true">
       <mat-nav-list>
+        <mat-list-item [routerLink]="['source-type']">
+          <mat-icon matTooltip="Source Typoe" [matTooltipPosition]="'right'">type_specimen</mat-icon>
+        </mat-list-item>
         <mat-list-item [routerLink]="['source']">
-          <mat-icon matTooltip="Source" [matTooltipPosition]="'right'">storage</mat-icon>
+          <mat-icon matTooltip="Source" [matTooltipPosition]="'right'">source</mat-icon>
         </mat-list-item>
         <mat-list-item [routerLink]="['primitive']">
-          <mat-icon matTooltip="Primitive" [matTooltipPosition]="'right'">description</mat-icon>
+          <mat-icon matTooltip="Primitive" [matTooltipPosition]="'right'">data_object</mat-icon>
         </mat-list-item>
         <mat-list-item [routerLink]="['collection']">
           <mat-icon matTooltip="Collection" [matTooltipPosition]="'right'">apps</mat-icon>

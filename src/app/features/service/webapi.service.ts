@@ -7,7 +7,7 @@ import { SourcesResponse } from './reponses/sources-response';
 @Injectable({
   providedIn: 'root',
 })
-export class SourceHttpService {
+export class WebapiService {
   constructor(private http: HttpClient) {}
 
   getAllSourceTypes(url: string): Observable<SourceTypesResponse> {
