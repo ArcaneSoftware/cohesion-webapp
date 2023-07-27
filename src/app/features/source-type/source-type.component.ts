@@ -4,24 +4,24 @@ import { SourceElement } from '../models/source-element';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
-import { SourceHttpService } from './service/sourceHttp.service';
-import * as fromSource from './state/source-state.reducer';
+import { WebapiService } from '../service/webapi.service';
+import * as fromSource from './state/source-type-state.reducer';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SourceTypesResponse } from './service/reponses/source-types-response';
+import { SourceTypesResponse } from '../service/reponses/source-types-response';
 import APP_SETTINGS from 'src/app/settings/app-settings';
-import { SelectedSourceType } from './state/source-state.action';
-import { SourcesResponse } from './service/reponses/sources-response';
+import { SelectedSourceType } from './state/source-type-state.action';
+import { SourcesResponse } from '../service/reponses/sources-response';
 import { SourceTypeDialog } from './create-source-type/source-type-dialog';
 import { MatDialog } from '@angular/material/dialog';
-import { SourceMessageService } from './service/sourceMessage.service';
+import { MessageService } from '../service/message.service';
 
 @Component({
   selector: 'app-source',
-  templateUrl: './source.component.html',
-  styleUrls: ['./source.component.scss'],
+  templateUrl: './source-type.component.html',
+  styleUrls: ['./source-type.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -30,20 +30,20 @@ import { SourceMessageService } from './service/sourceMessage.service';
     ]),
   ],
 })
-export class SourceComponent implements OnInit {
+export class SourceTypeComponent implements OnInit {
   currentSourceType: SourceTypeElement = new SourceTypeElement();
-  getAllSourceTypes$: Observable<SourceTypesResponse> = this.sourceHttpSerive.getAllSourceTypes(APP_SETTINGS.baseApiUrl);
+  getAllSourceTypes$: Observable<SourceTypesResponse> = this.httpService.getAllSourceTypes(APP_SETTINGS.baseApiUrl);
 
   constructor(
     private store: Store<fromSource.State>,
-    private sourceHttpSerive: SourceHttpService,
-    private sourceMessageService: SourceMessageService,
+    private httpService: WebapiService,
+    private messageService: MessageService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.sourceMessageService.currentSourceType.subscribe((currentSourceType) => (this.currentSourceType = currentSourceType));
+    this.messageService.currentSourceType.subscribe((currentSourceType) => (this.currentSourceType = currentSourceType));
   }
 
   onDeleteSourceType() {}

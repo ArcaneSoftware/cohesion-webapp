@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SourceComponent } from './source.component';
+import { SourceTypeComponent } from './source-type.component';
 
 describe('SourceComponent', () => {
-  let component: SourceComponent;
-  let fixture: ComponentFixture<SourceComponent>;
+  let component: SourceTypeComponent;
+  let fixture: ComponentFixture<SourceTypeComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SourceComponent]
+      declarations: [SourceTypeComponent],
     });
-    fixture = TestBed.createComponent(SourceComponent);
+    fixture = TestBed.createComponent(SourceTypeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

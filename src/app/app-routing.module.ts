@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PrimitiveComponent } from './features/primitive/primitive.component';
 import { CollectionComponent } from './features/collection/collection.component';
-import { SourceComponent } from './features/source/source.component';
+import { SourceTypeComponent } from './features/source-type/source-type.component';
 
 const routes: Routes = [
   {
@@ -16,8 +16,8 @@ const routes: Routes = [
     component: HomeComponent,
     children: [
       {
-        path: 'source',
-        component: SourceComponent,
+        path: 'source-type',
+        component: SourceTypeComponent,
       },
       {
         path: 'primitive',

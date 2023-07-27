@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { SourceElement } from '../../models/source-element';
 import { MatTableDataSource } from '@angular/material/table';
 import { SourceTypeElement } from '../../models/source-type-element';
-import { SourceMessageService } from '../service/sourceMessage.service';
+import { MessageService } from '../../service/message.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SourceHttpService } from '../service/sourceHttp.service';
+import { WebapiService } from '../../service/webapi.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { take, catchError, Observable } from 'rxjs';
 import APP_SETTINGS from 'src/app/settings/app-settings';
-import { SourcesResponse } from '../service/reponses/sources-response';
+import { SourcesResponse } from '../../service/reponses/sources-response';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
@@ -24,10 +24,10 @@ export class SourceTypeDetailComponent implements OnInit {
   sourceTable: MatTableDataSource<SourceElement> = new MatTableDataSource();
   sourceColumns = ['SelectAction', 'SourceName', 'Address', 'MoreActions'];
 
-  constructor(private sourceMessageService: SourceMessageService, private sourceHttpSerive: SourceHttpService, private snackBar: MatSnackBar) {}
+  constructor(private messageService: MessageService, private httpService: WebapiService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.sourceMessageService.currentSourceType.subscribe((currentSourceType) => {
+    this.messageService.currentSourceType.subscribe((currentSourceType) => {
       this.orignalSourceType = currentSourceType;
       this.selectedSourceType = Object.assign({}, currentSourceType);
 
@@ -64,7 +64,7 @@ export class SourceTypeDetailComponent implements OnInit {
   }
 
   fetchSources() {
-    this.sourceHttpSerive
+    this.httpService
       .getSourcesBySourceTypeId(APP_SETTINGS.baseApiUrl, this.orignalSourceType.sourceTypeId)
       .pipe(
         take(1),

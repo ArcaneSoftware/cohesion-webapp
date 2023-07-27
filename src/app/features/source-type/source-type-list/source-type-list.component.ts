@@ -1,20 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SourceTypeElement } from '../../models/source-type-element';
-import { SourceTypesResponse } from '../service/reponses/source-types-response';
+import { SourceTypesResponse } from '../../service/reponses/source-types-response';
 import { Observable, catchError, take } from 'rxjs';
 import APP_SETTINGS from 'src/app/settings/app-settings';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { SourceHttpService } from '../service/sourceHttp.service';
+import { WebapiService } from '../../service/webapi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import * as fromSource from '../state/source-state.reducer';
+import * as fromSource from '../state/source-type-state.reducer';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SourceTypeDialog } from '../create-source-type/source-type-dialog';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SourceMessageService } from '../service/sourceMessage.service';
+import { MessageService } from '../../service/message.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { SelectedSourceType } from '../state/source-state.action';
+import { SelectedSourceType } from '../state/source-type-state.action';
 
 @Component({
   selector: 'app-source-type-list',
@@ -26,7 +26,7 @@ export class SourceTypeListComponent implements OnInit {
   @Input() inputedSourceTypeName!: string;
 
   currentSourceType: SourceTypeElement = new SourceTypeElement();
-  getAllSourceTypes$: Observable<SourceTypesResponse> = this.sourceHttpSerive.getAllSourceTypes(APP_SETTINGS.baseApiUrl);
+  getAllSourceTypes$: Observable<SourceTypesResponse> = this.httpService.getAllSourceTypes(APP_SETTINGS.baseApiUrl);
 
   sourceTypeSelection = new SelectionModel<SourceTypeElement>(true, []);
 
@@ -37,8 +37,8 @@ export class SourceTypeListComponent implements OnInit {
 
   constructor(
     private store: Store<fromSource.State>,
-    private sourceMessageService: SourceMessageService,
-    private sourceHttpSerive: SourceHttpService,
+    private messageService: MessageService,
+    private httpService: WebapiService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
@@ -82,7 +82,7 @@ export class SourceTypeListComponent implements OnInit {
   onClickSourceTypeElement(soureType: SourceTypeElement) {
     this.currentSourceType = soureType;
 
-    this.sourceMessageService.selectSourceType(this.currentSourceType);
+    this.messageService.selectSourceType(this.currentSourceType);
     this.store.dispatch(new SelectedSourceType(soureType));
   }
 

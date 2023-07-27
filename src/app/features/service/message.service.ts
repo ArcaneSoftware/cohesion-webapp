@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SourceTypeElement } from '../../models/source-type-element';
+import { SourceTypeElement } from '../models/source-type-element';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SourceMessageService {
+export class MessageService {
   private behaviorSubject = new BehaviorSubject(new SourceTypeElement());
 
   currentSourceType = this.behaviorSubject.asObservable();
