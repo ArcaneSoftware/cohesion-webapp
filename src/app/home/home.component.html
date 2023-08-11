@@ -1,24 +1,24 @@
 <div class="column-container home-container">
-  <mat-toolbar color="primary">
-    <span>Cohesion ({{ appVersion }})</span>
-  </mat-toolbar>
-  <mat-drawer-container class="home-sidenav-container mat-typography">
-    <mat-drawer mode="side" disableClose="true" opened="true">
-      <mat-nav-list>
-        <mat-list-item [routerLink]="['source-type']">
-          <mat-icon matTooltip="Source Typoe" [matTooltipPosition]="'right'">type_specimen</mat-icon>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['source']">
-          <mat-icon matTooltip="Source" [matTooltipPosition]="'right'">source</mat-icon>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['primitive']">
-          <mat-icon matTooltip="Primitive" [matTooltipPosition]="'right'">data_object</mat-icon>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['collection']">
-          <mat-icon matTooltip="Collection" [matTooltipPosition]="'right'">apps</mat-icon>
-        </mat-list-item>
-      </mat-nav-list>
-    </mat-drawer>
-    <mat-drawer-content> <router-outlet></router-outlet></mat-drawer-content>
-  </mat-drawer-container>
+    <mat-toolbar color="primary">
+        <span>Cohesion ({{ appVersion }})</span>
+    </mat-toolbar>
+    <mat-drawer-container class="home-sidenav-container mat-typography">
+        <mat-drawer mode="side" disableClose="true" opened="true">
+            <mat-nav-list>
+                <mat-list-item [routerLink]="['source-type']">
+                    <mat-icon matTooltip="Source Typoe" [matTooltipPosition]="'right'">type_specimen</mat-icon>
+                </mat-list-item>
+                <mat-list-item [routerLink]="['source']">
+                    <mat-icon matTooltip="Source" [matTooltipPosition]="'right'">source</mat-icon>
+                </mat-list-item>
+                <mat-list-item [routerLink]="['primitive']">
+                    <mat-icon matTooltip="Primitive" [matTooltipPosition]="'right'">data_object</mat-icon>
+                </mat-list-item>
+                <mat-list-item [routerLink]="['collection']">
+                    <mat-icon matTooltip="Collection" [matTooltipPosition]="'right'">apps</mat-icon>
+                </mat-list-item>
+            </mat-nav-list>
+        </mat-drawer>
+        <mat-drawer-content> <router-outlet></router-outlet></mat-drawer-content>
+    </mat-drawer-container>
 </div>

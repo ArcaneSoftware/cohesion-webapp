@@ -1,18 +1,21 @@
 <div class="row-container" style="margin: 5px">
-  <button *ngIf="canFilterOperation" color="accent" mat-icon-button matTooltip="Filter In Place" (click)="onFilter()">
-    <mat-icon>{{ isFilterMode() ? "play_circle_outline" : "filter_alt" }}</mat-icon>
-  </button>
-  <button *ngIf="canRefreshOperation" color="accent" mat-icon-button (click)="onRefresh()">
-    <mat-icon>refresh</mat-icon>
-  </button>
-  <button color="accent" mat-icon-button (click)="onAdd()">
-    <mat-icon>add</mat-icon>
-  </button>
-  <button *ngIf="canRemoveOperation" color="accent" mat-icon-button (click)="onRemove()">
-    <mat-icon>remove</mat-icon>
-  </button>
-  <button *ngIf="canSaveOperation" color="accent" [disabled]="!isContentChanged" mat-icon-button (click)="onSave()">
-    <mat-icon>save</mat-icon>
-  </button>
-  <span>{{ operationMode }}</span>
+    <button *ngIf="canFilterOperation" color="accent" mat-icon-button matTooltip="Filter In Place" (click)="onFilter()">
+        <mat-icon>{{ isFilterMode() ? "play_circle_outline" : "filter_alt" }}</mat-icon>
+    </button>
+    <button *ngIf="canRefreshOperation" color="accent" mat-icon-button (click)="onRefresh()">
+        <mat-icon>refresh</mat-icon>
+    </button>
+    <button color="accent" mat-icon-button (click)="onAdd()">
+        <mat-icon>add</mat-icon>
+    </button>
+    <button *ngIf="canRemoveOperation" color="accent" mat-icon-button (click)="onRemove()">
+        <mat-icon>remove</mat-icon>
+    </button>
+    <button *ngIf="canSaveOperation" color="accent" [disabled]="!isContentChanged" mat-icon-button (click)="onSave()">
+        <mat-icon>save</mat-icon>
+    </button>
+    <button *ngIf="canUndoOperation" color="accent" [disabled]="!isContentChanged" mat-icon-button (click)="onSave()">
+        <mat-icon>undo</mat-icon>
+    </button>
+    <span>{{ operationMode }}</span>
 </div>

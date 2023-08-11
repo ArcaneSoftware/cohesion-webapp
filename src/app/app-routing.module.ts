@@ -7,36 +7,36 @@ import { CollectionComponent } from './features/collection/collection.component'
 import { SourceTypeComponent } from './features/source-type/source-type.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: HomeComponent,
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
-    children: [
-      {
-        path: 'source-type',
-        component: SourceTypeComponent,
-      },
-      {
-        path: 'primitive',
-        component: PrimitiveComponent,
-      },
-      {
-        path: 'collection',
-        component: CollectionComponent,
-      },
-    ],
-  },
-  {
-    path: '**',
-    component: PageNotFoundComponent,
-  },
+    {
+        path: '',
+        component: HomeComponent,
+    },
+    {
+        path: 'home',
+        component: HomeComponent,
+        children: [
+            {
+                path: 'source-type',
+                component: SourceTypeComponent,
+            },
+            {
+                path: 'primitive',
+                component: PrimitiveComponent,
+            },
+            {
+                path: 'collection',
+                component: CollectionComponent,
+            },
+        ],
+    },
+    {
+        path: '**',
+        component: PageNotFoundComponent,
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
 })
 export class AppRoutingModule {}
