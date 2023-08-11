@@ -1,6 +1,6 @@
 export class SourceTypeElement {
   position: number = 0;
-  sourceTypeId: number | null = null;
+  sourceTypeId: string | null = null;
   sourceTypeName: string = '';
   sourceTypeDescription: string = '';
 }

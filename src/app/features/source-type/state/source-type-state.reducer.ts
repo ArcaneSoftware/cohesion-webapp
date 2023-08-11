@@ -1,26 +1,23 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { SourceTypeElement } from '../../models/source-type-element';
-import { SourceStateActions, SELECTED_SOURCE_TYPE_ACTION } from './source-type-state.action';
+import { SourceTypeElement } from '../../../models/source-type/source-type-element';
+import { SourceTypeStateActions, SET_SOURCE_TYPE_SELECTED_ACTION } from './source-type-state.action';
 
 export interface State {
-  selectedSourceType: SourceTypeElement;
+  selected: SourceTypeElement;
 }
 
 const initialState: State = {
-  selectedSourceType: new SourceTypeElement(),
+  selected: new SourceTypeElement(),
 };
 
-export function SourceStateReducer(state = initialState, action: SourceStateActions) {
+export function SourceStateReducer(state = initialState, action: SourceTypeStateActions) {
   switch (action.type) {
-    case SELECTED_SOURCE_TYPE_ACTION:
-      return { ...state, selectedSourceType: action.payload };
+    case SET_SOURCE_TYPE_SELECTED_ACTION:
+      return { ...state, selected: action.payload };
     default: {
       return state;
     }
   }
 }
 
-export const getsSelectedSourceType = (state: State) => state.selectedSourceType;
-
-export const getSourceState = createFeatureSelector<State>('sourceState');
-export const getsSelectedSourceTypeSelector = createSelector(getSourceState, getsSelectedSourceType);
+export const getSourceTypeSelected = (state: State) => state.selected;

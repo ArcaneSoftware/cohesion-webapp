@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { SourceElement } from '../../models/source-element';
+import { SourceElement } from '../../../models/source/source-element';
 import { MatTableDataSource } from '@angular/material/table';
-import { SourceTypeElement } from '../../models/source-type-element';
-import { MessageService } from '../../service/message.service';
+import { SourceTypeElement } from '../../../models/source-type/source-type-element';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { WebapiService } from '../../service/webapi.service';
+import { WebapiService } from '../../../service/webapi.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { take, catchError, Observable } from 'rxjs';
+import { take, catchError, Observable, takeUntil, Subject } from 'rxjs';
 import APP_SETTINGS from 'src/app/settings/app-settings';
-import { SourcesResponse } from '../../service/reponses/sources-response';
+import { SourcesResponse } from '../../../service/reponses/sources-response';
 import { SelectionModel } from '@angular/cdk/collections';
+import { getOperationModeState, getSourceTypeSelectedState } from 'src/app/app.reducer';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../app.reducer';
+import { OperationMode } from '../../../common/operation/model/operation-mode';
 
 @Component({
   selector: 'app-source-type-detail',
@@ -17,6 +20,9 @@ import { SelectionModel } from '@angular/cdk/collections';
   styleUrls: ['./source-type-detail.component.scss'],
 })
 export class SourceTypeDetailComponent implements OnInit {
+  private destroy$ = new Subject<void>();
+
+  operationMode: string = OperationMode.Filter;
   orignalSourceType: SourceTypeElement = new SourceTypeElement();
   selectedSourceType: SourceTypeElement = new SourceTypeElement();
 
@@ -24,20 +30,16 @@ export class SourceTypeDetailComponent implements OnInit {
   sourceTable: MatTableDataSource<SourceElement> = new MatTableDataSource();
   sourceColumns = ['SelectAction', 'SourceName', 'Address', 'MoreActions'];
 
-  constructor(private messageService: MessageService, private httpService: WebapiService, private snackBar: MatSnackBar) {}
+  constructor(private store: Store<fromRoot.State>, private webapiService: WebapiService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.messageService.currentSourceType.subscribe((currentSourceType) => {
-      this.orignalSourceType = currentSourceType;
-      this.selectedSourceType = Object.assign({}, currentSourceType);
-
-      if (this.orignalSourceType.sourceTypeId != null) {
-        this.fetchSources();
-      }
-    });
+    this.subscribeOperationState();
   }
 
-  onDeleteSourceType() {}
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   onRestoreSourceTypeElementName() {
     this.selectedSourceType.sourceTypeName = this.orignalSourceType.sourceTypeName;
@@ -47,24 +49,56 @@ export class SourceTypeDetailComponent implements OnInit {
 
   onCurrentSourceTypeChange() {}
 
-  getDisplaySourceTypeName(): string {
-    if (this.selectedSourceType.sourceTypeId == null) {
-      return 'Source Type Name';
-    } else {
-      return this.selectedSourceType.sourceTypeName;
-    }
+  launchFilterMode() {
+    this.sourceSelection.clear();
+    this.orignalSourceType = new SourceTypeElement();
+    this.selectedSourceType = new SourceTypeElement();
+    this.sourceTable = new MatTableDataSource();
   }
 
-  getDisplaySourceTypeDescription(): string {
-    if (this.selectedSourceType.sourceTypeId == null) {
-      return 'Source Type Description';
-    } else {
-      return this.selectedSourceType.sourceTypeDescription;
-    }
+  launchEditMode() {}
+
+  launchAddMode() {
+    this.sourceSelection.clear();
+    this.orignalSourceType = new SourceTypeElement();
+    this.selectedSourceType = new SourceTypeElement();
+    this.sourceTable = new MatTableDataSource();
+  }
+
+  subscribeOperationState() {
+    this.store
+      .select(getSourceTypeSelectedState)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((sourceTypeSelected) => {
+        this.orignalSourceType = sourceTypeSelected;
+        this.selectedSourceType = Object.assign({}, sourceTypeSelected);
+
+        if (this.orignalSourceType.sourceTypeId != null) {
+          this.fetchSources();
+        }
+      });
+    this.store
+      .select(getOperationModeState)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((operationMode) => {
+        this.operationMode = operationMode;
+
+        if (operationMode == OperationMode.Filter) {
+          this.launchFilterMode();
+        }
+
+        if (operationMode == OperationMode.Edit) {
+          this.launchEditMode();
+        }
+
+        if (operationMode == OperationMode.Add) {
+          this.launchAddMode();
+        }
+      });
   }
 
   fetchSources() {
-    this.httpService
+    this.webapiService
       .getSourcesBySourceTypeId(APP_SETTINGS.baseApiUrl, this.orignalSourceType.sourceTypeId)
       .pipe(
         take(1),
@@ -95,6 +129,10 @@ export class SourceTypeDetailComponent implements OnInit {
 
   isChange() {
     return JSON.stringify(this.selectedSourceType) !== JSON.stringify(this.orignalSourceType);
+  }
+
+  isFilterMode() {
+    return this.operationMode == OperationMode.Filter;
   }
 
   isAllSelected() {

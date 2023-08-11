@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
-import { SourceTypeElement } from '../../models/source-type-element';
+import { SourceTypeElement } from '../../../models/source-type/source-type-element';
 
-export const SELECTED_SOURCE_TYPE_ACTION = '[SOURCE] selected the source type';
+export const SET_SOURCE_TYPE_SELECTED_ACTION = '[SOURCE-TYPE] Set Source Type Current';
 
-export class SelectedSourceType implements Action {
-  readonly type = SELECTED_SOURCE_TYPE_ACTION;
+export class SetSourceTypeSelectedAction implements Action {
+  readonly type = SET_SOURCE_TYPE_SELECTED_ACTION;
 
   constructor(public payload: SourceTypeElement) {}
 }
 
-export type SourceStateActions = SelectedSourceType;
+export type SourceTypeStateActions = SetSourceTypeSelectedAction;

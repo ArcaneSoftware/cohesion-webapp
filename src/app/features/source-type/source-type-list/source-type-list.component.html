@@ -31,17 +31,12 @@
       <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
     </td>
   </ng-container>
-
-  <!-- display header row or not -->
-  <!-- <mat-header-row *matHeaderRowDef="sourceTypeColumns"></mat-header-row>
-  <mat-row matRipple *matRowDef="let row; columns: sourceTypeColumns" class="source-type-element-row"></mat-row> -->
-
   <tr mat-header-row *matHeaderRowDef="sourceTypeColumns; sticky: true"></tr>
   <tr mat-row *matRowDef="let row; columns: sourceTypeColumns"></tr>
 </table>
 
 <div class="buttons-row">
   <button color="accent" mat-icon-button (click)="onRefreshSourceTypes()"><mat-icon>refresh</mat-icon></button>
-  <button color="accent" mat-icon-button (click)="onCreateSourceType()"><mat-icon>add</mat-icon></button>
-  <button color="accent" mat-icon-button *ngIf="sourceTypeSelection.hasValue()"><mat-icon>remove</mat-icon></button>
+  <button color="accent" mat-icon-button (click)="onAddSourceType()"><mat-icon>add</mat-icon></button>
+  <button color="accent" mat-icon-button *ngIf="sourceTypeSelection.hasValue()" (click)="onRemoveSourceTypes()"><mat-icon>remove</mat-icon></button>
 </div>

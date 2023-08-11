@@ -1,5 +1,5 @@
 export interface SourceTypeModel {
-  sourceTypeId: number;
+  sourceTypeId: string;
   sourceTypeName: string;
   sourceTypeDescription: string;
 }
