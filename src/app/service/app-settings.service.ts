@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class AppSettingsService {
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
 
-  getAppSettings(): Observable<any> {
-    return this.http.get<any>('/assets/settings.json');
-  }
+    getAppSettings(): Observable<any> {
+        return this.http.get<any>('/assets/settings.json');
+    }
 }

@@ -1,70 +1,70 @@
 <app-operation></app-operation>
 
 <div class="column-container">
-  <div div class="row-container">
-    <mat-form-field style="width: 400px; margin-left: 5px; margin-right: 5px">
-      <mat-label>ID</mat-label>
-      <input disabled="{{ !isFilterMode() }}" matInput [(ngModel)]="selectedSourceType.sourceTypeId" />
-      <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
-    </mat-form-field>
-    <mat-form-field style="width: 600px; margin-left: 5px; margin-right: 5px">
-      <mat-label>Name</mat-label>
-      <input matInput required="true" [(ngModel)]="selectedSourceType.sourceTypeName" />
-      <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
-    </mat-form-field>
-  </div>
+    <div div class="row-container">
+        <mat-form-field style="width: 400px; margin-left: 5px; margin-right: 5px">
+            <mat-label>ID</mat-label>
+            <input disabled="{{ !isFilterMode() }}" matInput [(ngModel)]="selectedSourceType.sourceTypeId" />
+            <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
+        </mat-form-field>
+        <mat-form-field style="width: 600px; margin-left: 5px; margin-right: 5px">
+            <mat-label>Name</mat-label>
+            <input matInput required="true" [(ngModel)]="selectedSourceType.sourceTypeName" />
+            <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
+        </mat-form-field>
+    </div>
 
-  <mat-form-field style="width: 1010px; margin-left: 5px; margin-right: 5px">
-    <mat-label>Description</mat-label>
-    <input matInput [(ngModel)]="selectedSourceType.sourceTypeDescription" />
-    <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
-  </mat-form-field>
+    <mat-form-field style="width: 1010px; margin-left: 5px; margin-right: 5px">
+        <mat-label>Description</mat-label>
+        <input matInput [(ngModel)]="selectedSourceType.sourceTypeDescription" />
+        <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
+    </mat-form-field>
 </div>
 
 <div class="source-list-table-container">
-  <table mat-table [dataSource]="sourceTable" class="mat-elevation-z8">
-    <ng-container matColumnDef="SelectAction">
-      <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox
-          (change)="$event ? toggleAllRows() : null"
-          [checked]="sourceSelection.hasValue() && isAllSelected()"
-          [indeterminate]="sourceSelection.hasValue() && !isAllSelected()"
-          [aria-label]="checkboxLabel()"
-        >
-        </mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox
-          (click)="$event.stopPropagation()"
-          (change)="$event ? sourceSelection.toggle(row) : null"
-          [checked]="sourceSelection.isSelected(row)"
-          [aria-label]="checkboxLabel(row)"
-        >
-        </mat-checkbox>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef>No.</th>
-      <td mat-cell *matCellDef="let row">{{ row.position }}</td>
-    </ng-container>
-    <ng-container matColumnDef="SourceName">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let row">{{ row.sourceName }}</td>
-    </ng-container>
-    <ng-container matColumnDef="Address">
-      <th mat-header-cell *matHeaderCellDef>Address</th>
-      <td mat-cell *matCellDef="let row" (click)="sourceSelection.toggle(row)">{{ row.address }}</td>
-    </ng-container>
-    <ng-container matColumnDef="MoreActions">
-      <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="sourceColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: sourceColumns"></tr>
-  </table>
+    <table mat-table [dataSource]="sourceTable" class="mat-elevation-z8">
+        <ng-container matColumnDef="SelectAction">
+            <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox
+                    (change)="$event ? toggleAllRows() : null"
+                    [checked]="sourceSelection.hasValue() && isAllSelected()"
+                    [indeterminate]="sourceSelection.hasValue() && !isAllSelected()"
+                    [aria-label]="checkboxLabel()"
+                >
+                </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+                <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="$event ? sourceSelection.toggle(row) : null"
+                    [checked]="sourceSelection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)"
+                >
+                </mat-checkbox>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>No.</th>
+            <td mat-cell *matCellDef="let row">{{ row.position }}</td>
+        </ng-container>
+        <ng-container matColumnDef="SourceName">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.sourceName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="Address">
+            <th mat-header-cell *matHeaderCellDef>Address</th>
+            <td mat-cell *matCellDef="let row" (click)="sourceSelection.toggle(row)">{{ row.address }}</td>
+        </ng-container>
+        <ng-container matColumnDef="MoreActions">
+            <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="sourceColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: sourceColumns"></tr>
+    </table>
 </div>
 <div class="row-container">
-  <mat-paginator matPrefix [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements"> </mat-paginator>
+    <mat-paginator matPrefix [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements"> </mat-paginator>
 </div>

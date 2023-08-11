@@ -17,33 +17,33 @@ import { SourceTypeDetailComponent } from './features/source-type/source-type-de
 import { OperationComponent } from './common/operation/operation.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PageNotFoundComponent,
-    HomeComponent,
-    CollectionComponent,
-    PrimitiveComponent,
-    SourceTypeComponent,
-    SourceTypeListComponent,
-    SourceTypeDetailComponent,
-    OperationComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    HttpClientModule,
-    StoreModule.forRoot(reducer, {
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true,
-        strictStateSerializability: false,
-        strictActionSerializability: false,
-      },
-    }),
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        PageNotFoundComponent,
+        HomeComponent,
+        CollectionComponent,
+        PrimitiveComponent,
+        SourceTypeComponent,
+        SourceTypeListComponent,
+        SourceTypeDetailComponent,
+        OperationComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MaterialModule,
+        HttpClientModule,
+        StoreModule.forRoot(reducer, {
+            runtimeChecks: {
+                strictStateImmutability: true,
+                strictActionImmutability: true,
+                strictStateSerializability: false,
+                strictActionSerializability: false,
+            },
+        }),
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

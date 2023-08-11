@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SourceTypeElement } from '../../../models/source-type/source-type-element';
 import { SourceTypesResponse } from '../../../service/reponses/source-types-response';
-import { Observable, Subject, catchError, take } from 'rxjs';
+import { Observable, Subject, catchError, take, takeUntil } from 'rxjs';
 import APP_SETTINGS from '../../../settings/app-settings';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
@@ -13,112 +13,148 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { SetSourceTypeSelectedAction } from '../state/source-type-state.action';
 import { SetOperationModeAction } from '../../../common/operation/state/operation-state.action';
 import { OperationMode } from '../../../common/operation/model/operation-mode';
+import { getOperationModeState, getSourceTypeFilterRequestState } from 'src/app/app.reducer';
+import { FilterSourceTypeRequest } from 'src/app/service/requests/filter-source-type-request';
 
 @Component({
-  selector: 'app-source-type-list',
-  templateUrl: './source-type-list.component.html',
-  styleUrls: ['./source-type-list.component.scss'],
+    selector: 'app-source-type-list',
+    templateUrl: './source-type-list.component.html',
+    styleUrls: ['./source-type-list.component.scss'],
 })
 export class SourceTypeListComponent implements OnInit {
-  private destroy$ = new Subject<void>();
+    private destroy$ = new Subject<void>();
 
-  currentSourceType: SourceTypeElement = new SourceTypeElement();
-  getAllSourceTypes$: Observable<SourceTypesResponse> = this.webapiService.getAllSourceTypes(APP_SETTINGS.baseApiUrl);
+    operationMode: string = OperationMode.Filter;
+    filterRequest: FilterSourceTypeRequest = new FilterSourceTypeRequest();
 
-  sourceTypeSelection = new SelectionModel<SourceTypeElement>(true, []);
+    currentSourceType: SourceTypeElement = new SourceTypeElement();
 
-  sourceTypeDescription: string = '';
+    sourceTypeSelection = new SelectionModel<SourceTypeElement>(true, []);
 
-  sourceTypeTable: MatTableDataSource<SourceTypeElement> = new MatTableDataSource<SourceTypeElement>();
-  sourceTypeColumns = ['SelectAction', 'SourceTypeName', 'MoreActions'];
+    sourceTypeDescription: string = '';
 
-  constructor(
-    private store: Store<fromSource.State>,
-    //private sourceTypeMessageService: SourceTypeMessageService,
-    private webapiService: WebapiService,
-    private snackBar: MatSnackBar
-  ) {}
+    sourceTypeTable: MatTableDataSource<SourceTypeElement> = new MatTableDataSource<SourceTypeElement>();
+    sourceTypeColumns = ['SelectAction', 'SourceTypeName', 'MoreActions'];
 
-  ngOnInit(): void {
-    // this.store
-    //   .select(getOperationModeState)
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((operationModeState) => {
-    //     this.operationMode = operationModeState;
-    //   });
-  }
+    constructor(
+        private store: Store<fromSource.State>,
+        private webapiService: WebapiService,
+        private snackBar: MatSnackBar,
+    ) {}
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+    ngOnInit(): void {
+        this.store
+            .select(getOperationModeState)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((operationMode) => {
+                this.operationMode = operationMode;
 
-  loadSourceTypes() {
-    this.getAllSourceTypes$
-      .pipe(
-        take(1),
-        catchError((error: HttpErrorResponse) => {
-          this.snackBar.open(error.message, 'close', { duration: 2000 });
+                if (operationMode == OperationMode.Filter) {
+                    this.launchFilterMode();
+                }
 
-          console.error(error.message);
+                if (operationMode == OperationMode.Edit) {
+                    this.launchEditMode();
+                }
+            });
 
-          return new Observable<never>();
-        })
-      )
-      .subscribe((getAllSourceTypesResponse: SourceTypesResponse) => {
-        let sourceTypes: SourceTypeElement[] = [];
+        this.store
+            .select(getSourceTypeFilterRequestState)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((filterRequest) => {
+                if (filterRequest === undefined) {
+                    return;
+                }
 
-        getAllSourceTypesResponse.sourceTypes.map((x, i) => {
-          sourceTypes.push({
-            position: i,
-            sourceTypeId: x.sourceTypeId,
-            sourceTypeName: x.sourceTypeName,
-            sourceTypeDescription: x.sourceTypeDescription,
-          });
-        });
+                if (this.operationMode != OperationMode.Edit) {
+                    return;
+                }
 
-        this.sourceTypeTable = new MatTableDataSource(sourceTypes);
-      });
-  }
+                this.filterRequest = filterRequest;
 
-  onRefreshSourceTypes() {
-    this.loadSourceTypes();
-  }
-
-  onAddSourceType() {
-    this.store.dispatch(new SetOperationModeAction(OperationMode.Add));
-  }
-
-  onRemoveSourceTypes() {}
-
-  onClickSourceTypeElement(soureType: SourceTypeElement) {
-    this.currentSourceType = soureType;
-
-    this.store.dispatch(new SetSourceTypeSelectedAction(soureType));
-    this.store.dispatch(new SetOperationModeAction(OperationMode.Edit));
-  }
-
-  isAllSelected() {
-    const numSelected = this.sourceTypeSelection.selected.length;
-    const numRows = this.sourceTypeTable.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.sourceTypeSelection.clear();
-      return;
+                this.filterSourceTypes();
+            });
     }
 
-    this.sourceTypeSelection.select(...this.sourceTypeTable.data);
-  }
-
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: SourceTypeElement): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
-    return `${this.sourceTypeSelection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-  }
+
+    onRefreshSourceTypes() {
+        this.filterSourceTypes();
+    }
+
+    onAddSourceType() {
+        this.store.dispatch(new SetOperationModeAction(OperationMode.Add));
+    }
+
+    onRemoveSourceTypes() {}
+
+    onClickSourceTypeElement(soureType: SourceTypeElement) {
+        this.currentSourceType = soureType;
+
+        this.store.dispatch(new SetSourceTypeSelectedAction(soureType));
+        this.store.dispatch(new SetOperationModeAction(OperationMode.Edit));
+    }
+
+    filterSourceTypes() {
+        this.webapiService
+            .filterSourceTypes(APP_SETTINGS.baseApiUrl, this.filterRequest)
+            .pipe(
+                take(1),
+                catchError((error: HttpErrorResponse) => {
+                    this.snackBar.open(error.message, 'close', { duration: 2000 });
+
+                    console.error(error.message);
+
+                    return new Observable<never>();
+                }),
+            )
+            .subscribe((filterSourceTypesResponse: SourceTypesResponse) => {
+                let sourceTypes: SourceTypeElement[] = [];
+
+                filterSourceTypesResponse.sourceTypes.map((x, i) => {
+                    sourceTypes.push({
+                        position: i,
+                        sourceTypeId: x.sourceTypeId,
+                        sourceTypeName: x.sourceTypeName,
+                        sourceTypeDescription: x.sourceTypeDescription,
+                    });
+                });
+
+                this.sourceTypeTable = new MatTableDataSource(sourceTypes);
+            });
+    }
+
+    launchFilterMode() {
+        this.sourceTypeSelection.clear();
+        this.sourceTypeTable = new MatTableDataSource();
+    }
+
+    launchEditMode() {}
+
+    isAllSelected() {
+        const numSelected = this.sourceTypeSelection.selected.length;
+        const numRows = this.sourceTypeTable.data.length;
+        return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    toggleAllRows() {
+        if (this.isAllSelected()) {
+            this.sourceTypeSelection.clear();
+            return;
+        }
+
+        this.sourceTypeSelection.select(...this.sourceTypeTable.data);
+    }
+
+    /** The label for the checkbox on the passed row */
+    checkboxLabel(row?: SourceTypeElement): string {
+        if (!row) {
+            return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+        }
+        return `${this.sourceTypeSelection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    }
 }

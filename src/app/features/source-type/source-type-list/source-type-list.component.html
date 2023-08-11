@@ -1,42 +1,42 @@
 <table mat-table [dataSource]="sourceTypeTable" multiTemplateDataRows class="mat-elevation-z8">
-  <ng-container matColumnDef="SelectAction">
-    <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox
-        (change)="$event ? toggleAllRows() : null"
-        [checked]="sourceTypeSelection.hasValue() && isAllSelected()"
-        [indeterminate]="sourceTypeSelection.hasValue() && !isAllSelected()"
-        [aria-label]="checkboxLabel()"
-      >
-      </mat-checkbox>
-    </th>
-    <td mat-cell *matCellDef="let row">
-      <mat-checkbox
-        (click)="$event.stopPropagation()"
-        (change)="$event ? sourceTypeSelection.toggle(row) : null"
-        [checked]="sourceTypeSelection.isSelected(row)"
-        [aria-label]="checkboxLabel(row)"
-      >
-      </mat-checkbox>
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="SourceTypeName">
-    <th mat-header-cell *matHeaderCellDef>Source Type</th>
-    <td mat-cell *matCellDef="let row" (click)="onClickSourceTypeElement(row); $event.stopPropagation()">
-      {{ row.sourceTypeName }}
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="MoreActions">
-    <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
-    <td mat-cell *matCellDef="let row">
-      <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
-    </td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="sourceTypeColumns; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: sourceTypeColumns"></tr>
+    <ng-container matColumnDef="SelectAction">
+        <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+                (change)="$event ? toggleAllRows() : null"
+                [checked]="sourceTypeSelection.hasValue() && isAllSelected()"
+                [indeterminate]="sourceTypeSelection.hasValue() && !isAllSelected()"
+                [aria-label]="checkboxLabel()"
+            >
+            </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event ? sourceTypeSelection.toggle(row) : null"
+                [checked]="sourceTypeSelection.isSelected(row)"
+                [aria-label]="checkboxLabel(row)"
+            >
+            </mat-checkbox>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="SourceTypeName">
+        <th mat-header-cell *matHeaderCellDef>Source Type</th>
+        <td mat-cell *matCellDef="let row" (click)="onClickSourceTypeElement(row); $event.stopPropagation()">
+            {{ row.sourceTypeName }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="MoreActions">
+        <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+        <td mat-cell *matCellDef="let row">
+            <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="sourceTypeColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: sourceTypeColumns"></tr>
 </table>
 
 <div class="buttons-row">
-  <button color="accent" mat-icon-button (click)="onRefreshSourceTypes()"><mat-icon>refresh</mat-icon></button>
-  <button color="accent" mat-icon-button (click)="onAddSourceType()"><mat-icon>add</mat-icon></button>
-  <button color="accent" mat-icon-button *ngIf="sourceTypeSelection.hasValue()" (click)="onRemoveSourceTypes()"><mat-icon>remove</mat-icon></button>
+    <button color="accent" mat-icon-button (click)="onRefreshSourceTypes()"><mat-icon>refresh</mat-icon></button>
+    <button color="accent" mat-icon-button (click)="onAddSourceType()"><mat-icon>add</mat-icon></button>
+    <button color="accent" mat-icon-button *ngIf="sourceTypeSelection.hasValue()" (click)="onRemoveSourceTypes()"><mat-icon>remove</mat-icon></button>
 </div>

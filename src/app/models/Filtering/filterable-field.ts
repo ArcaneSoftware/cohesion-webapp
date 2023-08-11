@@ -1,14 +1,14 @@
 export enum FilterOperator {
-  EqualTo = 'Equal To',
-  NotEqualTo = 'Not Equal To',
-  GreaterThan = 'Greater Than',
-  GreaterThanOrEqual = 'Greater Than O rEqual',
-  LessThan = 'Less Than',
-  LessThanOrEqual = 'Less Than Or Equal',
-  Contains = 'Contains',
+    EqualTo = 'EqualTo',
+    NotEqualTo = 'NotEqualTo',
+    GreaterThan = 'GreaterThan',
+    GreaterThanOrEqual = 'GreaterThanOrEqual',
+    LessThan = 'LessThan',
+    LessThanOrEqual = 'LessThanOrEqual',
+    Contains = 'Contains',
 }
 
 export interface FilterableField {
-  value: object | null;
-  filterOperator: FilterOperator;
+    value: any | null;
+    filterOperator: FilterOperator;
 }

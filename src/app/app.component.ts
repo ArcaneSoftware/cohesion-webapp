@@ -7,37 +7,40 @@ import { SetAppBaseApiUrlAction, SetAppVersionAction } from './state/app-state.a
 import APP_SETTINGS from './settings/app-settings';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'cohesion-webapp';
+    title = 'cohesion-webapp';
 
-  initialized = new EventEmitter<boolean>();
-  getAppSettings$: Observable<any> = this.appSettingService.getAppSettings();
+    initialized = new EventEmitter<boolean>();
+    getAppSettings$: Observable<any> = this.appSettingService.getAppSettings();
 
-  constructor(private store: Store<fromAppReducer.State>, private appSettingService: AppSettingsService) {
-    console.log('[AppComponent] CONSTRACT');
-  }
+    constructor(
+        private store: Store<fromAppReducer.State>,
+        private appSettingService: AppSettingsService,
+    ) {
+        console.log('[AppComponent] CONSTRACT');
+    }
 
-  async ngOnInit() {
-    console.log('[AppComponent] ngOnInit');
+    async ngOnInit() {
+        console.log('[AppComponent] ngOnInit');
 
-    await this.loadAppSettingsAsnyc();
+        await this.loadAppSettingsAsnyc();
 
-    this.initialized.emit(true);
-  }
+        this.initialized.emit(true);
+    }
 
-  async loadAppSettingsAsnyc() {
-    let getAppSettings: any = await firstValueFrom(this.getAppSettings$);
+    async loadAppSettingsAsnyc() {
+        let getAppSettings: any = await firstValueFrom(this.getAppSettings$);
 
-    await this.store.dispatch(new SetAppBaseApiUrlAction(getAppSettings.baseApiUrl));
-    await this.store.dispatch(new SetAppVersionAction(getAppSettings.appVersion));
+        await this.store.dispatch(new SetAppBaseApiUrlAction(getAppSettings.baseApiUrl));
+        await this.store.dispatch(new SetAppVersionAction(getAppSettings.appVersion));
 
-    APP_SETTINGS.baseApiUrl = getAppSettings.baseApiUrl;
-    APP_SETTINGS.appVersion = getAppSettings.appVersion;
+        APP_SETTINGS.baseApiUrl = getAppSettings.baseApiUrl;
+        APP_SETTINGS.appVersion = getAppSettings.appVersion;
 
-    console.log(`[AppComponent] loadAppSettings ${getAppSettings.baseApiUrl}`);
-  }
+        console.log(`[AppComponent] loadAppSettings ${getAppSettings.baseApiUrl}`);
+    }
 }

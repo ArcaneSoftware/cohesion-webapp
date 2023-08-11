@@ -1,6 +1,6 @@
 class AppSettings {
-  baseApiUrl: string = '';
-  appVersion: string = '';
+    baseApiUrl: string = '';
+    appVersion: string = '';
 }
 
 const APP_SETTINGS = new AppSettings();
