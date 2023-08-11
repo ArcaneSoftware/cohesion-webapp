@@ -1,6 +1,6 @@
 export interface SourceElement {
   position: number;
-  sourceId: number;
+  sourceId: string;
   sourceName: string;
   sourceTypeName: string;
   address: string;

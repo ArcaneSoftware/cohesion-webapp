@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { MaterialModule } from './shared/material.modules';
+import { MaterialModule } from './common/material.modules';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { reducer } from './app.reducer';
 import { SourceTypeListComponent } from './features/source-type/source-type-list/source-type-list.component';
 import { SourceTypeDetailComponent } from './features/source-type/source-type-detail/source-type-detail.component';
+import { OperationComponent } from './common/operation/operation.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { SourceTypeDetailComponent } from './features/source-type/source-type-de
     SourceTypeComponent,
     SourceTypeListComponent,
     SourceTypeDetailComponent,
+    OperationComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,12 +1,12 @@
-import { AppStateActions, SET_BASE_API_URL_ACTION, SET_APP_VERSION_ACTION } from './app-state.action';
+import { AppStateActions, SET_APP_BASE_API_URL_ACTION, SET_APP_VERSION_ACTION } from './app-state.action';
 
 export interface State {
-  appVersion: string;
+  version: string;
   baseApiUrl: string;
 }
 
 const initialState: State = {
-  appVersion: '',
+  version: '',
   baseApiUrl: '',
 };
 
@@ -14,7 +14,7 @@ export function AppStateReducer(state = initialState, action: AppStateActions) {
   switch (action.type) {
     case SET_APP_VERSION_ACTION:
       return { ...state, appVersion: action.payload };
-    case SET_BASE_API_URL_ACTION:
+    case SET_APP_BASE_API_URL_ACTION:
       return { ...state, baseApiUrl: action.payload };
     default: {
       return state;
@@ -22,5 +22,5 @@ export function AppStateReducer(state = initialState, action: AppStateActions) {
   }
 }
 
-export const getAppVersion = (state: State) => state.appVersion;
-export const getBaseApiUrl = (state: State) => state.baseApiUrl;
+export const getAppVersion = (state: State) => state.version;
+export const getAppBaseApiUrl = (state: State) => state.baseApiUrl;

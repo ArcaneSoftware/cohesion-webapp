@@ -14,7 +14,7 @@ export class WebapiService {
     return this.http.get<SourceTypesResponse>(`${url}SourceType`);
   }
 
-  getSourcesBySourceTypeId(url: string, sourceTypeId: number | null) {
-    return this.http.get<SourcesResponse>(`${url}Source/SourceType/${sourceTypeId}`);
+  getSourcesBySourceTypeId(url: string, sourceTypeId: string | null) {
+    return this.http.get<SourcesResponse>(`${url}Source/source-type-id/${sourceTypeId}`);
   }
 }

@@ -1,20 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { SourceTypeElement } from '../../models/source-type-element';
-import { SourceTypesResponse } from '../../service/reponses/source-types-response';
-import { Observable, catchError, take } from 'rxjs';
-import APP_SETTINGS from 'src/app/settings/app-settings';
+import { Component, OnInit } from '@angular/core';
+import { SourceTypeElement } from '../../../models/source-type/source-type-element';
+import { SourceTypesResponse } from '../../../service/reponses/source-types-response';
+import { Observable, Subject, catchError, take } from 'rxjs';
+import APP_SETTINGS from '../../../settings/app-settings';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { WebapiService } from '../../service/webapi.service';
+import { WebapiService } from '../../../service/webapi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
 import * as fromSource from '../state/source-type-state.reducer';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SourceTypeDialog } from '../create-source-type/source-type-dialog';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { MessageService } from '../../service/message.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { SelectedSourceType } from '../state/source-type-state.action';
+import { SetSourceTypeSelectedAction } from '../state/source-type-state.action';
+import { SetOperationModeAction } from '../../../common/operation/state/operation-state.action';
+import { OperationMode } from '../../../common/operation/model/operation-mode';
 
 @Component({
   selector: 'app-source-type-list',
@@ -22,11 +20,10 @@ import { SelectedSourceType } from '../state/source-type-state.action';
   styleUrls: ['./source-type-list.component.scss'],
 })
 export class SourceTypeListComponent implements OnInit {
-  @Input() inputedSourceTypeId!: number;
-  @Input() inputedSourceTypeName!: string;
+  private destroy$ = new Subject<void>();
 
   currentSourceType: SourceTypeElement = new SourceTypeElement();
-  getAllSourceTypes$: Observable<SourceTypesResponse> = this.httpService.getAllSourceTypes(APP_SETTINGS.baseApiUrl);
+  getAllSourceTypes$: Observable<SourceTypesResponse> = this.webapiService.getAllSourceTypes(APP_SETTINGS.baseApiUrl);
 
   sourceTypeSelection = new SelectionModel<SourceTypeElement>(true, []);
 
@@ -37,14 +34,23 @@ export class SourceTypeListComponent implements OnInit {
 
   constructor(
     private store: Store<fromSource.State>,
-    private messageService: MessageService,
-    private httpService: WebapiService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    //private sourceTypeMessageService: SourceTypeMessageService,
+    private webapiService: WebapiService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.loadSourceTypes();
+    // this.store
+    //   .select(getOperationModeState)
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((operationModeState) => {
+    //     this.operationMode = operationModeState;
+    //   });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadSourceTypes() {
@@ -79,23 +85,17 @@ export class SourceTypeListComponent implements OnInit {
     this.loadSourceTypes();
   }
 
+  onAddSourceType() {
+    this.store.dispatch(new SetOperationModeAction(OperationMode.Add));
+  }
+
+  onRemoveSourceTypes() {}
+
   onClickSourceTypeElement(soureType: SourceTypeElement) {
     this.currentSourceType = soureType;
 
-    this.messageService.selectSourceType(this.currentSourceType);
-    this.store.dispatch(new SelectedSourceType(soureType));
-  }
-
-  onCreateSourceType() {
-    this.dialog.open(SourceTypeDialog, {
-      width: '800px',
-      height: '400px',
-      data: {
-        model: 'create',
-        sourceTypeName: this.currentSourceType.sourceTypeName,
-        sourceTypeDescription: this.sourceTypeDescription,
-      },
-    });
+    this.store.dispatch(new SetSourceTypeSelectedAction(soureType));
+    this.store.dispatch(new SetOperationModeAction(OperationMode.Edit));
   }
 
   isAllSelected() {
