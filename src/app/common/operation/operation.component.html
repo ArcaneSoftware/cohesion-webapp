@@ -8,13 +8,13 @@
     <button color="accent" mat-icon-button (click)="onAdd()">
         <mat-icon>add</mat-icon>
     </button>
-    <button *ngIf="canRemoveOperation" color="accent" mat-icon-button (click)="onRemove()">
+    <button *ngIf="canRemoveOperation" color="accent" [disabled]="!isSubjectSelected" mat-icon-button (click)="onRemove()">
         <mat-icon>remove</mat-icon>
     </button>
-    <button *ngIf="canSaveOperation" color="accent" [disabled]="!isContentChanged" mat-icon-button (click)="onSave()">
+    <button *ngIf="canSaveOperation" color="accent" [disabled]="!isSubjectChanged" mat-icon-button (click)="onSave()">
         <mat-icon>save</mat-icon>
     </button>
-    <button *ngIf="canUndoOperation" color="accent" [disabled]="!isContentChanged" mat-icon-button (click)="onSave()">
+    <button *ngIf="canUndoOperation" color="accent" [disabled]="!isSubjectChanged" mat-icon-button (click)="onSave()">
         <mat-icon>undo</mat-icon>
     </button>
     <span>{{ operationMode }}</span>

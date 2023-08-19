@@ -1,8 +1,12 @@
-<div class="row-container" style="height: 100%">
+<mat-card style="margin: 5px">
+    <app-operation></app-operation>
+</mat-card>
+
+<div class="row-container" style="height: 92%">
     <mat-card class="source-type-list-card">
-        <app-source-type-list />
+        <app-source-type-list [operationMode]="operationMode" [operationEvent]="operationEvent" [sourceTypes]="sourceTypes" />
     </mat-card>
     <mat-card class="source-type-detail-card">
-        <app-source-type-detail />
+        <app-source-type-detail [operationMode]="operationMode" [operationEvent]="operationEvent" (filterableFieldsChanged)="filterSourceTypes($event)" />
     </mat-card>
 </div>

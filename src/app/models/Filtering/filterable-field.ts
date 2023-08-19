@@ -9,6 +9,7 @@ export enum FilterOperator {
 }
 
 export interface FilterableField {
-    value: any | null;
+    fieldName: string;
     filterOperator: FilterOperator;
+    value: any | null;
 }

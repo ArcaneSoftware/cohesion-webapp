@@ -1,8 +1,14 @@
+import { SourceTypeElement } from '../models/source-type/source-type-element';
+
 class AppSettings {
-  baseApiUrl: string = '';
-  appVersion: string = '';
+    baseApiUrl: string = '';
+    appVersion: string = '';
 }
 
-const APP_SETTINGS = new AppSettings();
-
-export default APP_SETTINGS;
+export const APP_SETTINGS = new AppSettings();
+export let INITIAL_SOURCE_TYPE_ELEMENT: SourceTypeElement = {
+    position: 0,
+    sourceTypeId: null,
+    sourceTypeName: null,
+    sourceTypeDescription: null,
+};

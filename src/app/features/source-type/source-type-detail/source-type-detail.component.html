@@ -1,20 +1,18 @@
-<app-operation></app-operation>
-
 <div class="column-container">
     <div div class="row-container">
-        <mat-form-field style="width: 400px; margin-left: 5px; margin-right: 5px">
+        <mat-form-field style="width: 400px; margin: 5px">
             <mat-label>ID</mat-label>
             <input disabled="{{ !isFilterMode() }}" matInput [(ngModel)]="selectedSourceType.sourceTypeId" />
             <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
         </mat-form-field>
-        <mat-form-field style="width: 600px; margin-left: 5px; margin-right: 5px">
+        <mat-form-field style="width: 600px; margin: 5px">
             <mat-label>Name</mat-label>
             <input matInput required="true" [(ngModel)]="selectedSourceType.sourceTypeName" />
             <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
         </mat-form-field>
     </div>
 
-    <mat-form-field style="width: 1010px; margin-left: 5px; margin-right: 5px">
+    <mat-form-field style="width: 1010px; margin: 5px">
         <mat-label>Description</mat-label>
         <input matInput [(ngModel)]="selectedSourceType.sourceTypeDescription" />
         <button *ngIf="isFilterMode()" mat-icon-button matPrefix><mat-icon>code</mat-icon></button>
@@ -64,7 +62,8 @@
         <tr mat-header-row *matHeaderRowDef="sourceColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: sourceColumns"></tr>
     </table>
-</div>
-<div class="row-container">
     <mat-paginator matPrefix [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements"> </mat-paginator>
 </div>
+<!-- <div class="row-container">
+    <mat-paginator matPrefix [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements"> </mat-paginator>
+</div> -->
