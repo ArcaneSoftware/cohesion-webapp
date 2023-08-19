@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { SourceElement } from '../../../models/source/source-element';
 import { MatTableDataSource } from '@angular/material/table';
 import { SourceTypeElement } from '../../../models/source-type/source-type-element';
@@ -7,28 +7,36 @@ import { WebapiService } from '../../../service/webapi.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { take, catchError, Observable, takeUntil, Subject } from 'rxjs';
 import APP_SETTINGS from 'src/app/settings/app-settings';
-import { SourcesResponse } from '../../../service/reponses/sources-response';
+import { SourcesResponse } from '../../../service/reponses/source/sources-response';
 import { SelectionModel } from '@angular/cdk/collections';
-import { getOperationModeState, getSourceTypeSelectedState } from 'src/app/app.reducer';
+import { getOperationEventState, getSourceTypeSelectedState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../app.reducer';
-import { OperationMode } from '../../../common/operation/model/operation-mode';
-import { FilterSourceTypeRequest } from 'src/app/service/requests/filter-source-type-request';
-import { SetSourceTypeFilterRequestAction } from '../state/source-type-state.action';
-import { FilterOperator } from 'src/app/models/Filtering/filterable-field';
+import { OperationMode } from '../../../common/operation/operation-mode';
+import { FilterOperator, FilterableField } from 'src/app/models/Filtering/filterable-field';
+import { INITIAL_SOURCE_TYPE_ELEMENT } from 'src/app/constant/constant';
+import { OperationEvent } from 'src/app/common/operation-event';
 
 @Component({
     selector: 'app-source-type-detail',
     templateUrl: './source-type-detail.component.html',
     styleUrls: ['./source-type-detail.component.scss'],
 })
-export class SourceTypeDetailComponent implements OnInit {
+export class SourceTypeDetailComponent implements OnInit, OnChanges {
     private destroy$ = new Subject<void>();
 
-    operationMode: string = OperationMode.Filter;
-    filterRequest: FilterSourceTypeRequest = new FilterSourceTypeRequest();
-    orignalSourceType: SourceTypeElement = new SourceTypeElement();
-    selectedSourceType: SourceTypeElement = new SourceTypeElement();
+    @Input() operationMode: OperationMode = OperationMode.Filter;
+    @Input() operationEvent: OperationEvent | null = null;
+    @Output() filterableFieldsChanged = new EventEmitter<{ [key: string]: FilterableField }>();
+
+    filterableFields: { [key: string]: FilterableField } = {};
+    orignalSourceType: SourceTypeElement = INITIAL_SOURCE_TYPE_ELEMENT;
+    selectedSourceType: SourceTypeElement = {
+        position: 0,
+        sourceTypeId: '',
+        sourceTypeName: '',
+        sourceTypeDescription: '',
+    };
 
     sourceSelection = new SelectionModel<SourceElement>(true, []);
     sourceTable: MatTableDataSource<SourceElement> = new MatTableDataSource();
@@ -45,32 +53,39 @@ export class SourceTypeDetailComponent implements OnInit {
             .select(getSourceTypeSelectedState)
             .pipe(takeUntil(this.destroy$))
             .subscribe((sourceTypeSelected) => {
+                if (sourceTypeSelected.sourceTypeId == null) {
+                    return;
+                }
+
                 this.orignalSourceType = sourceTypeSelected;
                 this.selectedSourceType = Object.assign({}, sourceTypeSelected);
 
-                if (this.orignalSourceType.sourceTypeId != null) {
-                    this.fetchSources();
-                }
-            });
-        this.store
-            .select(getOperationModeState)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((operationMode) => {
-                this.operationMode = operationMode;
-
-                if (operationMode == OperationMode.Filter) {
-                    this.launchFilterMode();
-                }
-
-                if (operationMode == OperationMode.Edit) {
-                    this.launchEditMode();
-                }
+                this.fetchSources();
             });
     }
 
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['operationMode']) {
+            if (changes['operationMode'].currentValue == OperationMode.Filter) {
+                this.launchFilterMode();
+            }
+
+            if (changes['operationMode'].currentValue == OperationMode.Edit) {
+                this.launchEditMode();
+            }
+        }
+
+        if (changes['operationEvent']) {
+            if (changes['operationEvent'].currentValue == OperationEvent.Save) {
+            }
+            if (changes['operationEvent'].currentValue == OperationEvent.Undo) {
+            }
+        }
     }
 
     onRestoreSourceTypeElementName() {
@@ -83,47 +98,49 @@ export class SourceTypeDetailComponent implements OnInit {
 
     launchFilterMode() {
         this.sourceSelection.clear();
-        this.orignalSourceType = new SourceTypeElement();
-        this.selectedSourceType = new SourceTypeElement();
+        this.orignalSourceType = INITIAL_SOURCE_TYPE_ELEMENT;
         this.sourceTable = new MatTableDataSource();
 
-        this.selectedSourceType.sourceTypeId = this.filterRequest.sourceTypeId?.value;
-        this.selectedSourceType.sourceTypeName = this.filterRequest.sourceTypeName?.value;
-        this.selectedSourceType.sourceTypeDescription = this.filterRequest.sourceTypeDescription?.value;
+        this.selectedSourceType.sourceTypeId =
+            this.filterableFields['sourceTypeId'] != null ? this.filterableFields['sourceTypeId'].value : INITIAL_SOURCE_TYPE_ELEMENT.sourceTypeId;
+        this.selectedSourceType.sourceTypeName =
+            this.filterableFields['sourceTypeName'] != null ? this.filterableFields['sourceTypeName'].value : INITIAL_SOURCE_TYPE_ELEMENT.sourceTypeName;
+        this.selectedSourceType.sourceTypeDescription =
+            this.filterableFields['sourceTypeDescription'] != null
+                ? this.filterableFields['sourceTypeDescription'].value
+                : INITIAL_SOURCE_TYPE_ELEMENT.sourceTypeDescription;
     }
 
     launchEditMode() {
-        this.filterRequest = {
-            sourceTypeId:
-                this.selectedSourceType.sourceTypeId == null || this.selectedSourceType.sourceTypeId == undefined
-                    ? null
-                    : {
-                          value: this.selectedSourceType.sourceTypeId,
-                          filterOperator: FilterOperator.EqualTo,
-                      },
-            sourceTypeName:
-                this.selectedSourceType.sourceTypeName == null || this.selectedSourceType.sourceTypeName == undefined
-                    ? null
-                    : {
-                          value: this.selectedSourceType.sourceTypeName,
-                          filterOperator: FilterOperator.EqualTo,
-                      },
-            sourceTypeDescription:
-                this.selectedSourceType.sourceTypeDescription == null || this.selectedSourceType.sourceTypeDescription == undefined
-                    ? null
-                    : {
-                          value: this.selectedSourceType.sourceTypeDescription,
-                          filterOperator: FilterOperator.EqualTo,
-                      },
-        };
+        if (this.selectedSourceType.sourceTypeId != null) {
+            this.filterableFields['sourceTypeId'] = {
+                fieldName: 'sourceTypeId',
+                filterOperator: FilterOperator.EqualTo,
+                value: this.selectedSourceType.sourceTypeId,
+            };
+        }
+        if (this.selectedSourceType.sourceTypeName != null) {
+            this.filterableFields['sourceTypeName'] = {
+                fieldName: 'sourceTypeName',
+                filterOperator: FilterOperator.EqualTo,
+                value: this.selectedSourceType.sourceTypeName,
+            };
+        }
+        if (this.selectedSourceType.sourceTypeDescription != null) {
+            this.filterableFields['sourceTypeDescription'] = {
+                fieldName: 'sourceTypeDescription',
+                filterOperator: FilterOperator.EqualTo,
+                value: this.selectedSourceType.sourceTypeDescription,
+            };
+        }
 
-        this.store.dispatch(new SetSourceTypeFilterRequestAction(this.filterRequest));
+        this.filterableFieldsChanged.emit(this.filterableFields);
     }
 
     launchAddMode() {
         this.sourceSelection.clear();
-        this.orignalSourceType = new SourceTypeElement();
-        this.selectedSourceType = new SourceTypeElement();
+        this.orignalSourceType = INITIAL_SOURCE_TYPE_ELEMENT;
+        this.selectedSourceType = INITIAL_SOURCE_TYPE_ELEMENT;
         this.sourceTable = new MatTableDataSource();
     }
 
@@ -131,7 +148,7 @@ export class SourceTypeDetailComponent implements OnInit {
 
     fetchSources() {
         this.webapiService
-            .getSourcesBySourceTypeId(APP_SETTINGS.baseApiUrl, this.orignalSourceType.sourceTypeId)
+            .getSourcesBySourceTypeId(APP_SETTINGS.baseApiUrl, this.orignalSourceType.sourceTypeId!)
             .pipe(
                 take(1),
                 catchError((error: HttpErrorResponse) => {

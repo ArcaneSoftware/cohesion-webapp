@@ -1,28 +1,23 @@
+import { INITIAL_SOURCE_TYPE_ELEMENT } from 'src/app/constant/constant';
 import { SourceTypeElement } from '../../../models/source-type/source-type-element';
-import { SourceTypeStateActions, SET_SOURCE_TYPE_SELECTED_ACTION, SET_SOURCE_TYPE_FILTER_REQUEST_ACTION } from './source-type-state.action';
-import { FilterSourceTypeRequest } from 'src/app/service/requests/filter-source-type-request';
+import { SourceTypeStateActions, SET_SOURCE_TYPE_SELECTED_ACTION } from './source-type-state.action';
 
 export interface State {
-    selected: SourceTypeElement;
-    filterRequest: FilterSourceTypeRequest;
+    selectedElement: SourceTypeElement;
 }
 
 const initialState: State = {
-    selected: new SourceTypeElement(),
-    filterRequest: new FilterSourceTypeRequest(),
+    selectedElement: INITIAL_SOURCE_TYPE_ELEMENT,
 };
 
 export function SourceTypeStateReducer(state = initialState, action: SourceTypeStateActions) {
     switch (action.type) {
         case SET_SOURCE_TYPE_SELECTED_ACTION:
-            return { ...state, selected: action.payload };
-        case SET_SOURCE_TYPE_FILTER_REQUEST_ACTION:
-            return { ...state, filterRequest: action.payload };
+            return { ...state, selectedElement: action.payload };
         default: {
             return state;
         }
     }
 }
 
-export const getSourceTypeSelected = (state: State) => state.selected;
-export const getSourceTypeFilterRequest = (state: State) => state.filterRequest;
+export const getSourceTypeSelected = (state: State) => state.selectedElement;

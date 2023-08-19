@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { OperationMode } from './model/operation-mode';
+import { OperationMode } from './operation-mode';
 import * as fromRoot from '../../app.reducer';
 import { Store } from '@ngrx/store';
-import { SetOperationModeAction } from './state/operation-state.action';
+import { SetEventAction, SetOperationModeAction } from './state/operation-state.action';
 import { Subject, takeUntil } from 'rxjs';
-import { getOperationIsContentChangedState, getOperationModeState } from '../../app.reducer';
+import { getOperationIsSubjectChangedState, getOperationIsSubjectSelectedState, getOperationModeState } from '../../app.reducer';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { OperationEvent } from '../operation-event';
 
 @Component({
     selector: 'app-operation',
@@ -16,12 +17,14 @@ export class OperationComponent implements OnInit {
     private destroy$ = new Subject<void>();
 
     operationMode: OperationMode = OperationMode.Filter;
+
     canFilterOperation: boolean = true;
     canRefreshOperation: boolean = false;
     canRemoveOperation: boolean = false;
     canSaveOperation: boolean = false;
     canUndoOperation: boolean = false;
-    isContentChanged: boolean = false;
+    isSubjectChanged: boolean = false;
+    isSubjectSelected: boolean = false;
 
     constructor(
         private store: Store<fromRoot.State>,
@@ -38,10 +41,16 @@ export class OperationComponent implements OnInit {
                 this.enableOperationMode();
             });
         this.store
-            .select(getOperationIsContentChangedState)
+            .select(getOperationIsSubjectChangedState)
             .pipe(takeUntil(this.destroy$))
-            .subscribe((isContentChanged) => {
-                this.isContentChanged = isContentChanged;
+            .subscribe((isSubjectChanged) => {
+                this.isSubjectChanged = isSubjectChanged;
+            });
+        this.store
+            .select(getOperationIsSubjectSelectedState)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((isSubjectSelected) => {
+                this.isSubjectSelected = isSubjectSelected;
             });
     }
 
@@ -77,15 +86,7 @@ export class OperationComponent implements OnInit {
     }
 
     onRemove() {
-        if (this.isEditMode()) {
-            this.snackBar.open('Remove this from DB');
-        }
-
-        if (this.isAddMode()) {
-            this.snackBar.open('Clean it from UI');
-        }
-
-        this.onRefresh();
+        this.store.dispatch(new SetEventAction(OperationEvent.Remove));
     }
 
     onSave() {}

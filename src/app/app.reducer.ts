@@ -15,14 +15,15 @@ export const reducer: ActionReducerMap<State, any> = {
     sourceTypeState: fromSourceTypeStateReducer.SourceTypeStateReducer,
 };
 
-export const getAppState = createFeatureSelector<fromAppStateReducer.State>('appState');
-export const getAppVersionState = createSelector(getAppState, fromAppStateReducer.getAppVersion);
-export const getAppBaseApiUrlState = createSelector(getAppState, fromAppStateReducer.getAppBaseApiUrl);
+export const getAppFeatureState = createFeatureSelector<fromAppStateReducer.State>('appState');
+export const getAppVersionState = createSelector(getAppFeatureState, fromAppStateReducer.getAppVersion);
+export const getAppBaseApiUrlState = createSelector(getAppFeatureState, fromAppStateReducer.getAppBaseApiUrl);
 
 export const getOperationState = createFeatureSelector<fromOperationStateReducer.State>('operationState');
 export const getOperationModeState = createSelector(getOperationState, fromOperationStateReducer.getOperationMode);
-export const getOperationIsContentChangedState = createSelector(getOperationState, fromOperationStateReducer.getIsContentChanged);
+export const getOperationIsSubjectChangedState = createSelector(getOperationState, fromOperationStateReducer.getIsSubjectChanged);
+export const getOperationIsSubjectSelectedState = createSelector(getOperationState, fromOperationStateReducer.getIsSubjectSelected);
+export const getOperationEventState = createSelector(getOperationState, fromOperationStateReducer.getOperationEvent);
 
-export const getSourceTypeState = createFeatureSelector<fromSourceTypeStateReducer.State>('sourceTypeState');
-export const getSourceTypeSelectedState = createSelector(getSourceTypeState, fromSourceTypeStateReducer.getSourceTypeSelected);
-export const getSourceTypeFilterRequestState = createSelector(getSourceTypeState, fromSourceTypeStateReducer.getSourceTypeFilterRequest);
+export const getSourceTypeFeatureState = createFeatureSelector<fromSourceTypeStateReducer.State>('sourceTypeState');
+export const getSourceTypeSelectedState = createSelector(getSourceTypeFeatureState, fromSourceTypeStateReducer.getSourceTypeSelected);

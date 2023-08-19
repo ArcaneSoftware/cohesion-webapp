@@ -2,27 +2,21 @@
     <ng-container matColumnDef="SelectAction">
         <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox
-                (change)="$event ? toggleAllRows() : null"
+                (change)="$event ? onToggleAllSourceTypeElements() : null"
                 [checked]="sourceTypeSelection.hasValue() && isAllSelected()"
                 [indeterminate]="sourceTypeSelection.hasValue() && !isAllSelected()"
-                [aria-label]="checkboxLabel()"
             >
             </mat-checkbox>
         </th>
-        <td mat-cell *matCellDef="let row">
-            <mat-checkbox
-                (click)="$event.stopPropagation()"
-                (change)="$event ? sourceTypeSelection.toggle(row) : null"
-                [checked]="sourceTypeSelection.isSelected(row)"
-                [aria-label]="checkboxLabel(row)"
-            >
+        <td mat-cell *matCellDef="let element">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="onCheckSourceTypeElement($event, element)" [checked]="sourceTypeSelection.isSelected(element)">
             </mat-checkbox>
         </td>
     </ng-container>
     <ng-container matColumnDef="SourceTypeName">
         <th mat-header-cell *matHeaderCellDef>Source Type</th>
-        <td mat-cell *matCellDef="let row" (click)="onClickSourceTypeElement(row); $event.stopPropagation()">
-            {{ row.sourceTypeName }}
+        <td mat-cell *matCellDef="let element" (click)="onClickSourceTypeElement(element); $event.stopPropagation()">
+            {{ element.sourceTypeName }}
         </td>
     </ng-container>
     <ng-container matColumnDef="MoreActions">
@@ -35,8 +29,11 @@
     <tr mat-row *matRowDef="let row; columns: sourceTypeColumns"></tr>
 </table>
 
-<div class="buttons-row">
-    <button color="accent" mat-icon-button (click)="onRefreshSourceTypes()"><mat-icon>refresh</mat-icon></button>
-    <button color="accent" mat-icon-button (click)="onAddSourceType()"><mat-icon>add</mat-icon></button>
-    <button color="accent" mat-icon-button *ngIf="sourceTypeSelection.hasValue()" (click)="onRemoveSourceTypes()"><mat-icon>remove</mat-icon></button>
-</div>
+<!-- <div class="buttons-row">
+    <button *ngIf="canRefreshn()" color="accent" mat-icon-button (click)="onRefreshSourceTypes()">
+        <mat-icon>refresh</mat-icon>
+    </button>
+    <button *ngIf="canRemove()" color="accent" mat-icon-button (click)="onRemoveSourceTypes()">
+        <mat-icon>remove</mat-icon>
+    </button>
+</div> -->

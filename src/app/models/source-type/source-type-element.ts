@@ -1,6 +1,6 @@
-export class SourceTypeElement {
-    position: number = 0;
-    sourceTypeId: string | null = null;
-    sourceTypeName: string = '';
-    sourceTypeDescription: string = '';
+export interface SourceTypeElement {
+    position: number;
+    sourceTypeId: string | null;
+    sourceTypeName: string | null;
+    sourceTypeDescription: string | null;
 }
