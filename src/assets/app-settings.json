@@ -1,0 +1,4 @@
+{
+  "baseApiUrl": "http://localhost:5029/api/",
+  "appVersion": "0.0.0.1"
+}

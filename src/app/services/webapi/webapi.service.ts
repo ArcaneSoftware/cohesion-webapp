@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { QuerySourceTypesResponse } from './reponses/source-type/query-source-types-response';
 import { Observable } from 'rxjs';
+import { DeleteSourceTypesResponse } from './reponses/source-type/delete-source-types-response';
+import { QuerySourceTypesResponse } from './reponses/source-type/query-source-types-response';
 import { SourcesResponse } from './reponses/source/sources-response';
 import { FilterSourceTypeRequest } from './requests/filter-source-type-request';
-import { DeleteSourceTypesResponse } from './reponses/source-type/delete-source-types-response';
 
 @Injectable({
     providedIn: 'root',

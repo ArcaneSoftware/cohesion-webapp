@@ -1,4 +1,4 @@
-import { SourceModel } from '../../../models/source/source-model';
+import { SourceModel } from '../../models/source-model';
 
 export interface SourcesResponse {
     isSuccessful: boolean;

@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { SourceTypeElement } from '../../../models/source-type/source-type-element';
+import { SourceTypeElement } from '../models/source-type-element';
 
 export const SET_SOURCE_TYPE_SELECTED_ACTION = '[SOURCE-TYPE] Set Source Type Current';
 

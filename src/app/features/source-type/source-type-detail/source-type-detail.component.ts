@@ -1,21 +1,21 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { SourceElement } from '../../../models/source/source-element';
 import { MatTableDataSource } from '@angular/material/table';
-import { SourceTypeElement } from '../../../models/source-type/source-type-element';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { WebapiService } from '../../../service/webapi.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { take, catchError, Observable, takeUntil, Subject } from 'rxjs';
-import APP_SETTINGS from 'src/app/settings/app-settings';
-import { SourcesResponse } from '../../../service/reponses/source/sources-response';
 import { SelectionModel } from '@angular/cdk/collections';
-import { getOperationEventState, getSourceTypeSelectedState } from 'src/app/app.reducer';
+import { getSourceTypeSelectedState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../app.reducer';
-import { OperationMode } from '../../../common/operation/operation-mode';
-import { FilterOperator, FilterableField } from 'src/app/models/Filtering/filterable-field';
 import { INITIAL_SOURCE_TYPE_ELEMENT } from 'src/app/constant/constant';
-import { OperationEvent } from 'src/app/common/operation-event';
+import { OperationEvent } from 'src/app/common/operation/models/operation-event';
+import { AppSettingsService } from 'src/app/services/app-settings/app-settings.service';
+import { FilterableField, FilterOperator } from 'src/app/common/filtering/filterable-field';
+import { OperationMode } from 'src/app/common/operation/models/operation-mode';
+import { SourcesResponse } from 'src/app/services/webapi/reponses/source/sources-response';
+import { WebapiService } from 'src/app/services/webapi/webapi.service';
+import { SourceElement } from '../../source/source-element';
+import { SourceTypeElement } from '../models/source-type-element';
 
 @Component({
     selector: 'app-source-type-detail',
@@ -43,6 +43,7 @@ export class SourceTypeDetailComponent implements OnInit, OnChanges {
     sourceColumns = ['SelectAction', 'SourceName', 'Address', 'MoreActions'];
 
     constructor(
+        private appSettingsService: AppSettingsService,
         private store: Store<fromRoot.State>,
         private webapiService: WebapiService,
         private snackBar: MatSnackBar,
@@ -148,7 +149,7 @@ export class SourceTypeDetailComponent implements OnInit, OnChanges {
 
     fetchSources() {
         this.webapiService
-            .getSourcesBySourceTypeId(APP_SETTINGS.baseApiUrl, this.orignalSourceType.sourceTypeId!)
+            .getSourcesBySourceTypeId(this.appSettingsService.baseApiUrl, this.orignalSourceType.sourceTypeId!)
             .pipe(
                 take(1),
                 catchError((error: HttpErrorResponse) => {

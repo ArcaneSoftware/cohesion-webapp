@@ -1,4 +1,4 @@
-import { FilterableField } from 'src/app/models/Filtering/filterable-field';
+import { FilterableField } from 'src/app/common/filtering/filterable-field';
 
 export interface FilterSourceTypeRequest {
     sourceTypeId: FilterableField | null;
