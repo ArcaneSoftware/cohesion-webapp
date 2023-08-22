@@ -1,5 +1,5 @@
-import { OperationEvent } from '../../operation-event';
-import { OperationMode } from '../operation-mode';
+import { OperationEvent } from '../models/operation-event';
+import { OperationMode } from '../models/operation-mode';
 import {
     SET_OPERATION_IS_SUBJECT_CHANGED_ACTION,
     OperationStateActions,

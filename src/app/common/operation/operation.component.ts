@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { OperationMode } from './operation-mode';
 import * as fromRoot from '../../app.reducer';
 import { Store } from '@ngrx/store';
 import { SetEventAction, SetOperationModeAction } from './state/operation-state.action';
 import { Subject, takeUntil } from 'rxjs';
 import { getOperationIsSubjectChangedState, getOperationIsSubjectSelectedState, getOperationModeState } from '../../app.reducer';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { OperationEvent } from '../operation-event';
+import { OperationEvent } from './models/operation-event';
+import { OperationMode } from './models/operation-mode';
 
 @Component({
     selector: 'app-operation',

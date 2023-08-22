@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as fromRoot from '../app.reducer';
-import { Store } from '@ngrx/store';
-import APP_SETTINGS from '../settings/app-settings';
+import { AppSettingsService } from '../services/app-settings/app-settings.service';
 
 @Component({
     selector: 'app-home',
@@ -9,12 +7,9 @@ import APP_SETTINGS from '../settings/app-settings';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-    appVersion: string = APP_SETTINGS.appVersion;
-    showDrawerText: boolean = true;
+    appVersion: string = this.appSettingsService.appVersion;
 
-    constructor(private store: Store<fromRoot.State>) {}
+    constructor(private appSettingsService: AppSettingsService) {}
 
-    ngOnInit() {
-        //this.store.dispatch(new SetOperationModeAction(OperationMode.Filter));
-    }
+    ngOnInit() {}
 }

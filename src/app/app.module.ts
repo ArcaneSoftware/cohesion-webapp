@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './common/material.modules';
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +15,15 @@ import { reducer } from './app.reducer';
 import { SourceTypeListComponent } from './features/source-type/source-type-list/source-type-list.component';
 import { SourceTypeDetailComponent } from './features/source-type/source-type-detail/source-type-detail.component';
 import { OperationComponent } from './common/operation/operation.component';
+import { AppSettingsService } from './services/app-settings/app-settings.service';
+
+export let CONFIG: any;
+
+export function initializeAppSettings(appSettings: AppSettingsService) {
+    return (): Promise<any> => {
+        return appSettings.load('assets/app-settings.json');
+    };
+}
 
 @NgModule({
     declarations: [
@@ -43,7 +52,7 @@ import { OperationComponent } from './common/operation/operation.component';
             },
         }),
     ],
-    providers: [],
+    providers: [AppSettingsService, { provide: APP_INITIALIZER, useFactory: initializeAppSettings, deps: [AppSettingsService], multi: true }],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

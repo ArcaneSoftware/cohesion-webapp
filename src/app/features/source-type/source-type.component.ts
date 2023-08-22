@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, catchError, take, takeUntil } from 'rxjs';
-import { OperationMode } from 'src/app/common/operation/operation-mode';
-import { FilterSourceTypeRequest } from 'src/app/service/requests/filter-source-type-request';
-import { WebapiService } from 'src/app/service/webapi.service';
 import * as fromSource from './state/source-type-state.reducer';
 import { getOperationEventState, getOperationModeState } from 'src/app/app.reducer';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SourceTypeElement } from 'src/app/models/source-type/source-type-element';
-import { QuerySourceTypesResponse } from 'src/app/service/reponses/source-type/query-source-types-response';
-import APP_SETTINGS from 'src/app/settings/app-settings';
-import { FilterableField } from 'src/app/models/Filtering/filterable-field';
-import { OperationEvent } from 'src/app/common/operation-event';
+import { OperationEvent } from 'src/app/common/operation/models/operation-event';
+import { FilterableField } from 'src/app/common/filtering/filterable-field';
+import { OperationMode } from 'src/app/common/operation/models/operation-mode';
+import { QuerySourceTypesResponse } from 'src/app/services/webapi/reponses/source-type/query-source-types-response';
+import { FilterSourceTypeRequest } from 'src/app/services/webapi/requests/filter-source-type-request';
+import { WebapiService } from 'src/app/services/webapi/webapi.service';
+import { SourceTypeElement } from './models/source-type-element';
+import { AppSettingsService } from 'src/app/services/app-settings/app-settings.service';
 
 @Component({
     selector: 'app-source-type',
@@ -27,6 +27,7 @@ export class SourceTypeComponent implements OnInit {
     sourceTypes: SourceTypeElement[] = [];
 
     constructor(
+        private appSettingsService: AppSettingsService,
         private store: Store<fromSource.State>,
         private webapiService: WebapiService,
         private snackBar: MatSnackBar,
@@ -81,7 +82,7 @@ export class SourceTypeComponent implements OnInit {
         };
 
         this.webapiService
-            .filterSourceTypes(APP_SETTINGS.baseApiUrl, request)
+            .filterSourceTypes(this.appSettingsService.baseApiUrl, request)
             .pipe(
                 take(1),
                 catchError((error: HttpErrorResponse) => {

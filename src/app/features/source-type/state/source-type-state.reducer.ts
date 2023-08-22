@@ -1,6 +1,6 @@
 import { INITIAL_SOURCE_TYPE_ELEMENT } from 'src/app/constant/constant';
-import { SourceTypeElement } from '../../../models/source-type/source-type-element';
 import { SourceTypeStateActions, SET_SOURCE_TYPE_SELECTED_ACTION } from './source-type-state.action';
+import { SourceTypeElement } from '../models/source-type-element';
 
 export interface State {
     selectedElement: SourceTypeElement;

@@ -1,18 +1,17 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { SourceTypeElement } from '../../../models/source-type/source-type-element';
-import { Subject, takeUntil } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import * as fromSource from '../state/source-type-state.reducer';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SetSourceTypeSelectedAction } from '../state/source-type-state.action';
-import { OperationMode } from '../../../common/operation/operation-mode';
-import { SetIsSubjectSelectedAction, SetOperationModeAction } from 'src/app/common/operation/state/operation-state.action';
+import { SetIsSubjectSelectedAction } from 'src/app/common/operation/state/operation-state.action';
 import { INITIAL_SOURCE_TYPE_ELEMENT } from 'src/app/constant/constant';
-import { getOperationEventState } from 'src/app/app.reducer';
-import { OperationEvent } from 'src/app/common/operation-event';
+import { OperationEvent } from 'src/app/common/operation/models/operation-event';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { OperationMode } from 'src/app/common/operation/models/operation-mode';
+import { SourceTypeElement } from '../models/source-type-element';
+import { AppSettingsService } from 'src/app/services/app-settings/app-settings.service';
 
 @Component({
     selector: 'app-source-type-list',
@@ -31,6 +30,7 @@ export class SourceTypeListComponent implements OnInit, OnChanges {
     sourceTypeColumns = ['SelectAction', 'SourceTypeName', 'MoreActions'];
 
     constructor(
+        private appSettingsService: AppSettingsService,
         private store: Store<fromSource.State>,
         private snackBar: MatSnackBar,
     ) {}
@@ -82,7 +82,7 @@ export class SourceTypeListComponent implements OnInit, OnChanges {
     }
 
     handleRemoveEvent() {
-        this.snackBar.open('respose REMOVE', 'close', { duration: 5000 });
+        this.snackBar.open(this.appSettingsService.baseApiUrl, 'close', { duration: 5000 });
     }
 
     handleRefreshEvent() {

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { OperationMode } from '../operation-mode';
-import { OperationEvent } from '../../operation-event';
+import { OperationEvent } from '../models/operation-event';
+import { OperationMode } from '../models/operation-mode';
 
 export const SET_OPERATION_MODE_ACTION = '[OPERATION] Set Mode';
 export const SET_OPERATION_IS_SUBJECT_CHANGED_ACTION = '[OPERATION] Set Is Subject Changed';
