@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import * as fromRoot from '../../app.reducer';
 import { Store } from '@ngrx/store';
-import { SetEventAction, SetOperationModeAction } from './state/operation-state.action';
+import { SetOperationModeAction } from './state/operation-state.action';
 import { Subject, takeUntil } from 'rxjs';
 import { getOperationIsSubjectChangedState, getOperationIsSubjectSelectedState, getOperationModeState } from '../../app.reducer';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OperationEvent } from './models/operation-event';
 import { OperationMode } from './models/operation-mode';
+import { OperationService } from './services/operation-service';
 
 @Component({
     selector: 'app-operation',
@@ -28,6 +29,7 @@ export class OperationComponent implements OnInit {
 
     constructor(
         private store: Store<fromRoot.State>,
+        private operationEvebtService: OperationService,
         private snackBar: MatSnackBar,
     ) {}
 
@@ -86,7 +88,7 @@ export class OperationComponent implements OnInit {
     }
 
     onRemove() {
-        this.store.dispatch(new SetEventAction(OperationEvent.Remove));
+        this.operationEvebtService.emitOperationEvent(OperationEvent.Remove);
     }
 
     onSave() {}

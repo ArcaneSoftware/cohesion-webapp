@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, catchError, take, takeUntil } from 'rxjs';
 import * as fromSource from './state/source-type-state.reducer';
-import { getOperationEventState, getOperationModeState } from 'src/app/app.reducer';
+import { getOperationModeState } from 'src/app/app.reducer';
 import { HttpErrorResponse } from '@angular/common/http';
 import { OperationEvent } from 'src/app/common/operation/models/operation-event';
 import { FilterableField } from 'src/app/common/filtering/filterable-field';
@@ -13,6 +13,7 @@ import { FilterSourceTypeRequest } from 'src/app/services/webapi/requests/filter
 import { WebapiService } from 'src/app/services/webapi/webapi.service';
 import { SourceTypeElement } from './models/source-type-element';
 import { AppSettingsService } from 'src/app/services/app-settings/app-settings.service';
+import { OperationService } from 'src/app/common/operation/services/operation-service';
 
 @Component({
     selector: 'app-source-type',
@@ -28,10 +29,15 @@ export class SourceTypeComponent implements OnInit {
 
     constructor(
         private appSettingsService: AppSettingsService,
+        private operationEventSerice: OperationService,
         private store: Store<fromSource.State>,
         private webapiService: WebapiService,
         private snackBar: MatSnackBar,
-    ) {}
+    ) {
+        this.operationEventSerice.operationEventObservable$.subscribe((operationEvent) => {
+            this.operationEvent = operationEvent;
+        });
+    }
 
     ngOnInit(): void {
         this.store
@@ -39,17 +45,6 @@ export class SourceTypeComponent implements OnInit {
             .pipe(takeUntil(this.destroy$))
             .subscribe((operationMode) => {
                 this.operationMode = operationMode;
-            });
-
-        this.store
-            .select(getOperationEventState)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((operationEvent) => {
-                if (operationEvent == null) {
-                    return;
-                }
-
-                this.operationEvent = operationEvent;
             });
     }
 

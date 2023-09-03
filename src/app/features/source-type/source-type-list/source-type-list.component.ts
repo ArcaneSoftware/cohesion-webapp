@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { OperationMode } from 'src/app/common/operation/models/operation-mode';
 import { SourceTypeElement } from '../models/source-type-element';
 import { AppSettingsService } from 'src/app/services/app-settings/app-settings.service';
+import { OperationService } from 'src/app/common/operation/services/operation-service';
 
 @Component({
     selector: 'app-source-type-list',
@@ -20,7 +21,7 @@ import { AppSettingsService } from 'src/app/services/app-settings/app-settings.s
 })
 export class SourceTypeListComponent implements OnInit, OnChanges {
     @Input() operationMode: OperationMode = OperationMode.Filter;
-    @Input() operationEvent: OperationEvent | null = null;
+    operationEvent: OperationEvent | null = null;
     @Input() sourceTypes: SourceTypeElement[] = [];
 
     currentSourceTypeElement: SourceTypeElement = INITIAL_SOURCE_TYPE_ELEMENT;
@@ -31,9 +32,21 @@ export class SourceTypeListComponent implements OnInit, OnChanges {
 
     constructor(
         private appSettingsService: AppSettingsService,
+        private operationEventSerice: OperationService,
         private store: Store<fromSource.State>,
         private snackBar: MatSnackBar,
-    ) {}
+    ) {
+        this.operationEventSerice.operationEventObservable$.subscribe((operationEvent) => {
+            this.operationEvent = operationEvent;
+
+            if (this.operationEvent == OperationEvent.Remove) {
+                this.handleRemoveEvent();
+            }
+            if (this.operationEvent == OperationEvent.Refresh) {
+                this.handleRefreshEvent();
+            }
+        });
+    }
 
     ngOnInit(): void {}
 

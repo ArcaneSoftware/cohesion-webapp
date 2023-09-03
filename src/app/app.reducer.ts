@@ -23,7 +23,6 @@ export const getOperationState = createFeatureSelector<fromOperationStateReducer
 export const getOperationModeState = createSelector(getOperationState, fromOperationStateReducer.getOperationMode);
 export const getOperationIsSubjectChangedState = createSelector(getOperationState, fromOperationStateReducer.getIsSubjectChanged);
 export const getOperationIsSubjectSelectedState = createSelector(getOperationState, fromOperationStateReducer.getIsSubjectSelected);
-export const getOperationEventState = createSelector(getOperationState, fromOperationStateReducer.getOperationEvent);
 
 export const getSourceTypeFeatureState = createFeatureSelector<fromSourceTypeStateReducer.State>('sourceTypeState');
 export const getSourceTypeSelectedState = createSelector(getSourceTypeFeatureState, fromSourceTypeStateReducer.getSourceTypeSelected);
