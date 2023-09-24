@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as fromRoot from '../../app.reducer';
 import { Store } from '@ngrx/store';
-import { SetOperationModeAction } from './state/operation-state.action';
 import { Subject, takeUntil } from 'rxjs';
-import { getOperationIsSubjectChangedState, getOperationIsSubjectSelectedState, getOperationModeState } from '../../app.reducer';
+import { getOperationIsSubjectChangedState, getOperationIsSubjectSelectedState } from '../../app.reducer';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OperationEvent } from './models/operation-event';
 import { OperationMode } from './models/operation-mode';
@@ -29,19 +28,17 @@ export class OperationComponent implements OnInit {
 
     constructor(
         private store: Store<fromRoot.State>,
-        private operationEvebtService: OperationService,
+        private operationService: OperationService,
         private snackBar: MatSnackBar,
-    ) {}
+    ) {
+        this.operationService.operationModeObservable$.subscribe((operationMode) => {
+            this.operationMode = operationMode;
+
+            this.enableOperationMode();
+        });
+    }
 
     ngOnInit(): void {
-        this.store
-            .select(getOperationModeState)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((operationModeState) => {
-                this.operationMode = operationModeState;
-
-                this.enableOperationMode();
-            });
         this.store
             .select(getOperationIsSubjectChangedState)
             .pipe(takeUntil(this.destroy$))
@@ -65,30 +62,31 @@ export class OperationComponent implements OnInit {
         if (this.isFilterMode()) {
             //TODO: filter works
             this.operationMode = OperationMode.Edit;
-
-            this.store.dispatch(new SetOperationModeAction(this.operationMode));
         } else {
             //TODO: enter into filter mode
             this.operationMode = OperationMode.Filter;
-
-            this.store.dispatch(new SetOperationModeAction(this.operationMode));
         }
+        // this.store.dispatch(new SetOperationModeAction(this.operationMode));
+        this.operationService.emitOperationMode(this.operationMode);
     }
 
     onRefresh() {
         this.operationMode = OperationMode.Edit;
 
-        this.store.dispatch(new SetOperationModeAction(this.operationMode));
+        // this.store.dispatch(new SetOperationModeAction(this.operationMode));
+        this.operationService.emitOperationMode(this.operationMode);
     }
 
     onAdd() {
         this.operationMode = OperationMode.Add;
 
-        this.store.dispatch(new SetOperationModeAction(this.operationMode));
+        // this.store.dispatch(new SetOperationModeAction(this.operationMode));
+
+        this.operationService.emitOperationMode(this.operationMode);
     }
 
     onRemove() {
-        this.operationEvebtService.emitOperationEvent(OperationEvent.Remove);
+        this.operationService.emitOperationEvent(OperationEvent.Remove);
     }
 
     onSave() {}

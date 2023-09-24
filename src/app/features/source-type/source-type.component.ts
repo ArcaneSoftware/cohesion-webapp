@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, catchError, take, takeUntil } from 'rxjs';
+import { Observable, Subject, catchError, take } from 'rxjs';
 import * as fromSource from './state/source-type-state.reducer';
-import { getOperationModeState } from 'src/app/app.reducer';
 import { HttpErrorResponse } from '@angular/common/http';
 import { OperationEvent } from 'src/app/common/operation/models/operation-event';
 import { FilterableField } from 'src/app/common/filtering/filterable-field';
@@ -29,24 +28,21 @@ export class SourceTypeComponent implements OnInit {
 
     constructor(
         private appSettingsService: AppSettingsService,
-        private operationEventSerice: OperationService,
+        private operationService: OperationService,
         private store: Store<fromSource.State>,
         private webapiService: WebapiService,
         private snackBar: MatSnackBar,
     ) {
-        this.operationEventSerice.operationEventObservable$.subscribe((operationEvent) => {
+        this.operationService.operationEventObservable$.subscribe((operationEvent) => {
             this.operationEvent = operationEvent;
+        });
+
+        this.operationService.operationModeObservable$.subscribe((operationMode) => {
+            this.operationMode = operationMode;
         });
     }
 
-    ngOnInit(): void {
-        this.store
-            .select(getOperationModeState)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((operationMode) => {
-                this.operationMode = operationMode;
-            });
-    }
+    ngOnInit(): void {}
 
     filterSourceTypes(filterableFields: { [key: string]: FilterableField }) {
         const request: FilterSourceTypeRequest = {

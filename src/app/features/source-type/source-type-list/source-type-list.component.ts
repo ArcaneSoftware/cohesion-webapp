@@ -20,7 +20,7 @@ import { OperationService } from 'src/app/common/operation/services/operation-se
     styleUrls: ['./source-type-list.component.scss'],
 })
 export class SourceTypeListComponent implements OnInit, OnChanges {
-    @Input() operationMode: OperationMode = OperationMode.Filter;
+    operationMode: OperationMode = OperationMode.Filter;
     operationEvent: OperationEvent | null = null;
     @Input() sourceTypes: SourceTypeElement[] = [];
 
@@ -32,11 +32,20 @@ export class SourceTypeListComponent implements OnInit, OnChanges {
 
     constructor(
         private appSettingsService: AppSettingsService,
-        private operationEventSerice: OperationService,
+        private operationService: OperationService,
         private store: Store<fromSource.State>,
         private snackBar: MatSnackBar,
     ) {
-        this.operationEventSerice.operationEventObservable$.subscribe((operationEvent) => {
+        this.operationService.operationModeObservable$.subscribe((operationMode) => {
+            this.operationMode = operationMode;
+
+            if (this.operationMode == OperationMode.Filter) {
+                this.sourceTypeTable = new MatTableDataSource();
+                this.sourceTypeSelection.clear();
+            }
+        });
+
+        this.operationService.operationEventObservable$.subscribe((operationEvent) => {
             this.operationEvent = operationEvent;
 
             if (this.operationEvent == OperationEvent.Remove) {
@@ -51,24 +60,8 @@ export class SourceTypeListComponent implements OnInit, OnChanges {
     ngOnInit(): void {}
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['operationMode']) {
-            if (changes['operationMode'].currentValue == OperationMode.Filter) {
-                this.sourceTypeTable = new MatTableDataSource();
-                this.sourceTypeSelection.clear();
-            }
-        }
-
         if (changes['sourceTypes']) {
             this.sourceTypeTable = new MatTableDataSource<SourceTypeElement>(this.sourceTypes);
-        }
-
-        if (changes['operationEvent']) {
-            if (changes['operationEvent'].currentValue == OperationEvent.Remove) {
-                this.handleRemoveEvent();
-            }
-            if (changes['operationEvent'].currentValue == OperationEvent.Refresh) {
-                this.handleRefreshEvent();
-            }
         }
     }
 

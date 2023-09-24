@@ -16,6 +16,7 @@ import { SourcesResponse } from 'src/app/services/webapi/reponses/source/sources
 import { WebapiService } from 'src/app/services/webapi/webapi.service';
 import { SourceElement } from '../../source/source-element';
 import { SourceTypeElement } from '../models/source-type-element';
+import { OperationService } from 'src/app/common/operation/services/operation-service';
 
 @Component({
     selector: 'app-source-type-detail',
@@ -25,8 +26,8 @@ import { SourceTypeElement } from '../models/source-type-element';
 export class SourceTypeDetailComponent implements OnInit, OnChanges {
     private destroy$ = new Subject<void>();
 
-    @Input() operationMode: OperationMode = OperationMode.Filter;
-    @Input() operationEvent: OperationEvent | null = null;
+    operationMode: OperationMode = OperationMode.Filter;
+    operationEvent: OperationEvent | null = null;
     @Output() filterableFieldsChanged = new EventEmitter<{ [key: string]: FilterableField }>();
 
     filterableFields: { [key: string]: FilterableField } = {};
@@ -44,10 +45,32 @@ export class SourceTypeDetailComponent implements OnInit, OnChanges {
 
     constructor(
         private appSettingsService: AppSettingsService,
+        private operationService: OperationService,
         private store: Store<fromRoot.State>,
         private webapiService: WebapiService,
         private snackBar: MatSnackBar,
-    ) {}
+    ) {
+        this.operationService.operationModeObservable$.subscribe((operationMode) => {
+            this.operationMode = operationMode;
+
+            if (this.operationMode == OperationMode.Filter) {
+                this.launchFilterMode();
+            }
+
+            if (this.operationMode == OperationMode.Edit) {
+                this.launchEditMode();
+            }
+        });
+
+        this.operationService.operationEventObservable$.subscribe((operationEvent) => {
+            this.operationEvent = operationEvent;
+
+            if (this.operationEvent == OperationEvent.Save) {
+            }
+            if (this.operationEvent == OperationEvent.Undo) {
+            }
+        });
+    }
 
     ngOnInit(): void {
         this.store
@@ -63,6 +86,8 @@ export class SourceTypeDetailComponent implements OnInit, OnChanges {
 
                 this.fetchSources();
             });
+
+        this.launchFilterMode();
     }
 
     ngOnDestroy() {
@@ -71,22 +96,20 @@ export class SourceTypeDetailComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['operationMode']) {
-            if (changes['operationMode'].currentValue == OperationMode.Filter) {
-                this.launchFilterMode();
-            }
-
-            if (changes['operationMode'].currentValue == OperationMode.Edit) {
-                this.launchEditMode();
-            }
-        }
-
-        if (changes['operationEvent']) {
-            if (changes['operationEvent'].currentValue == OperationEvent.Save) {
-            }
-            if (changes['operationEvent'].currentValue == OperationEvent.Undo) {
-            }
-        }
+        // if (changes['operationMode']) {
+        //     if (changes['operationMode'].currentValue == OperationMode.Filter) {
+        //         this.launchFilterMode();
+        //     }
+        //     if (changes['operationMode'].currentValue == OperationMode.Edit) {
+        //         this.launchEditMode();
+        //     }
+        // }
+        // if (changes['operationEvent']) {
+        //     if (changes['operationEvent'].currentValue == OperationEvent.Save) {
+        //     }
+        //     if (changes['operationEvent'].currentValue == OperationEvent.Undo) {
+        //     }
+        // }
     }
 
     onRestoreSourceTypeElementName() {

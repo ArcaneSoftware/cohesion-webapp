@@ -20,7 +20,6 @@ export const getAppVersionState = createSelector(getAppFeatureState, fromAppStat
 export const getAppBaseApiUrlState = createSelector(getAppFeatureState, fromAppStateReducer.getAppBaseApiUrl);
 
 export const getOperationState = createFeatureSelector<fromOperationStateReducer.State>('operationState');
-export const getOperationModeState = createSelector(getOperationState, fromOperationStateReducer.getOperationMode);
 export const getOperationIsSubjectChangedState = createSelector(getOperationState, fromOperationStateReducer.getIsSubjectChanged);
 export const getOperationIsSubjectSelectedState = createSelector(getOperationState, fromOperationStateReducer.getIsSubjectSelected);
 
